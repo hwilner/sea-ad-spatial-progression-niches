@@ -1,0 +1,13 @@
+# Core runtime + test dependencies (pinned). See pyproject.toml for the
+# canonical dependency spec and optional extras ([leiden], [spatial]).
+numpy
+pandas
+scipy
+scikit-learn
+pytest
+ruff
+# scanpy, squidpy, and statsmodels are required only for the real-data
+# pipeline once SEA-AD access is granted (see docs/DATA_ACCESS.md):
+# scanpy
+# squidpy
+# statsmodels
