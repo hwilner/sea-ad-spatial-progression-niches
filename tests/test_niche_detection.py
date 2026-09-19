@@ -6,10 +6,8 @@ under the file name referenced by the backlog task card.
 
 import numpy as np
 import pandas as pd
-from scipy.optimize import linear_sum_assignment
 
 from seaad_niches.niches import assign_niches
-from seaad_niches.simulate import simulate_tissue
 from seaad_niches.spatial import build_neighbor_graph, neighbor_composition
 
 
