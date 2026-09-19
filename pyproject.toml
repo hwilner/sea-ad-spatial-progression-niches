@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seaad_niches"
+version = "0.1.0"
+description = "Data-free spatial niche and progression-association utilities for the SEA-AD spatial progression series (Paper 1)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+# Optional spatial/single-cell stack. Modules import these lazily and fall
+# back (k-means) or skip when they are unavailable.
+leiden = ["leidenalg", "igraph"]
+spatial = ["anndata", "squidpy"]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
