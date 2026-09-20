@@ -59,5 +59,7 @@ Alzheimer's disease, SEA-AD, MERFISH, spatial transcriptomics, cell niches, comp
 ## Documentation
 
 - [Introduction for new readers](docs/INTRODUCTION.md)
+- [Extended introduction — zero-background guide](docs/EXTENDED_INTRODUCTION.md)
+- [Extended methods & materials](docs/METHODS.md)
 - [SEA-AD data access status](docs/DATA_ACCESS.md)
 - [Data sources and versions](docs/DATA_SOURCES.md)
