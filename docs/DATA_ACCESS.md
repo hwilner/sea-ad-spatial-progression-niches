@@ -1,33 +1,43 @@
 # SEA-AD data access
 
-**Status: blocked.** Real-data tasks in this repository require access to
-the SEA-AD atlas (snRNA-seq and MERFISH, middle temporal gyrus). The
-repository owner must first complete the data-access/data-use steps
-tracked in the backlog issue **"Set up SEA-AD open-data access and
-environment"** (task-key `setup-data-access-env`, issue #5).
+**Status: unblocked for the open MERFISH dataset.** The SEA-AD MTG MERFISH
+spatial transcriptomics data are open access (AWS Open Data Registry,
+`sea-ad-spatial-transcriptomics` bucket) — no DUA is required for the
+processed data this repository uses. See
+[docs/DATA_SOURCES.md](DATA_SOURCES.md) for exact dataset versions, DOIs,
+and integrity checksums.
 
-Until access is in place:
+## One-command setup
 
-- `seaad_niches.io.load_merfish_cells` and `load_snrnaseq_reference`
-  raise `RuntimeError` with a pointer to this page.
-- All development and CI run on synthetic tissues from
-  `seaad_niches.simulate.simulate_tissue`.
-- No SEA-AD data or derived real-data results may be committed.
+```bash
+make real-pipeline   # download (if needed) + neighbor enrichment + niche detection
+```
 
-## Planned sources (open, processed data only)
+or step by step:
 
-- SEA-AD snRNA-seq and MERFISH via the CELLxGENE collection.
-- AWS Open Data Registry: `allen-sea-ad-atlas`.
+```bash
+python scripts/download_seaad.py --cache-dir data/seaad   # ~500 MB, checksummed
+python scripts/analyze_seaad.py --cache-dir data/seaad    # writes reports/
+```
 
-Exact dataset versions/DOIs will be recorded in `docs/DATA_SOURCES.md`
-as part of the data-access task. Controlled-access raw material is out of
-scope for this repository.
+The download script verifies byte size and records SHA-256 in
+`data/seaad/MANIFEST.json`. The presence of that manifest unblocks
+`seaad_niches.io.load_merfish_cells`, which returns a per-cell table with
+`cell_id, donor, section, x, y, cell_type`.
 
-## Once access is granted
+## What is gated vs. open
 
-1. Complete issue #5 (document versions, scripted open-data download).
-2. Place a `MANIFEST.json` in the local data cache directory.
-3. The `io` module is then implemented against the frozen manifest
-   (freeze-analytical-dataset task) — the analysis modules
-   (`spatial`, `niches`, `progression`) already accept the coordinate /
-   label / donor-score tables the loaders will produce.
+| Data | Access | Used here |
+|---|---|---|
+| SEA-AD MTG MERFISH (processed h5ad) | Open (AWS Open Data Registry) | Yes — downloaded by `scripts/download_seaad.py` |
+| SEA-AD MTG snRNA-seq (processed) | Open (AWS / CELLxGENE) | Not needed yet (MERFISH cells carry mapped subclass/supertype labels) |
+| Raw sequencing data (AD Knowledge Portal) | Controlled access (DUA via Sage) | No — out of scope |
+
+## Rules
+
+- Downloaded data live in `data/seaad/` and must **never** be committed
+  (`.gitignore` covers `data/`).
+- Only small derived aggregate outputs (CSV/JSON under `reports/`) are
+  committed.
+- Without a staged `MANIFEST.json`, the `io` loaders raise `RuntimeError`
+  and the test suite runs on synthetic tissues only.
