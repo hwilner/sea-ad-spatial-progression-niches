@@ -1,0 +1,23 @@
+{
+  "dataset": "SEA-AD MTG MERFISH (open access, AWS Open Data Registry)",
+  "n_cells_loaded": 1887729,
+  "n_donors": 27,
+  "n_sections_analyzed": 69,
+  "n_cell_types": 24,
+  "k_neighbors": 6,
+  "n_permutations": 100,
+  "n_niches": 8,
+  "seed": 0,
+  "top_enriched_pair": {
+    "type_a": "L4 IT",
+    "type_b": "L5 IT",
+    "mean_z": 31.20021127882369,
+    "sem_z": 1.7354981348443261
+  },
+  "top_depleted_pair": {
+    "type_a": "L2/3 IT",
+    "type_b": "Oligodendrocyte",
+    "mean_z": -55.324554921054265,
+    "sem_z": 3.435008748354682
+  }
+}
