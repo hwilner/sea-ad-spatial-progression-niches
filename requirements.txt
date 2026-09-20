@@ -1,13 +1,15 @@
 # Core runtime + test dependencies (pinned). See pyproject.toml for the
 # canonical dependency spec and optional extras ([leiden], [spatial]).
-numpy
-pandas
-scipy
-scikit-learn
-pytest
+numpy>=1.24,<3
+pandas>=2.2,<3
+scipy>=1.10
+scikit-learn>=1.3
+pytest>=8.0
 ruff
-# scanpy, squidpy, and statsmodels are required only for the real-data
-# pipeline once SEA-AD access is granted (see docs/DATA_ACCESS.md):
-# scanpy
-# squidpy
-# statsmodels
+# Real-data pipeline environment (open SEA-AD download + analysis).
+# anndata is required to read the staged h5ad; scanpy/squidpy/statsmodels
+# support downstream analyses (see docs/DATA_SOURCES.md).
+anndata>=0.10
+scanpy>=1.10
+squidpy>=1.6
+statsmodels>=0.14
