@@ -86,10 +86,16 @@ def main() -> int:
 
     reports = Path(args.reports_dir)
     reports.mkdir(parents=True, exist_ok=True)
-    mean_z.to_csv(reports / "seaad_merfish_enrichment_mean_z.csv")
-    sem_z.to_csv(reports / "seaad_merfish_enrichment_sem_z.csv")
+    # The full 24x24 z-matrices are regenerable intermediates; the
+    # committed artifacts are the run summary, the per-pair table (which
+    # contains the same numbers), and the per-section niche summary.
+    mean_z.to_csv(reports / "seaad_merfish_enrichment_mean_z.csv",
+                  float_format="%.6g")
+    sem_z.to_csv(reports / "seaad_merfish_enrichment_sem_z.csv",
+                 float_format="%.6g")
     niche_df = pd.DataFrame(niche_rows)
-    niche_df.to_csv(reports / "seaad_merfish_niche_summary.csv", index=False)
+    niche_df.to_csv(reports / "seaad_merfish_niche_summary.csv", index=False,
+                    float_format="%.6g")
 
     # Top enriched / depleted subclass pairs (upper triangle, mean z).
     iu = np.triu_indices(len(cats), k=1)
@@ -101,7 +107,8 @@ def main() -> int:
             "sem_z": sem_z.to_numpy()[iu],
         }
     ).sort_values("mean_z", ascending=False)
-    pairs.to_csv(reports / "seaad_merfish_top_pairs.csv", index=False)
+    pairs.to_csv(reports / "seaad_merfish_top_pairs.csv", index=False,
+                 float_format="%.6g")
 
     run_summary = {
         "dataset": "SEA-AD MTG MERFISH (open access, AWS Open Data Registry)",
