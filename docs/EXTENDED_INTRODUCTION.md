@@ -1,6 +1,10 @@
 # Extended Introduction — A Zero-Background Guide to This Project
 
-Welcome! This document assumes **no background** in neuroscience, biology, or academia. If you can read a map and follow a recipe, you can understand everything in this repository. We'll build up from "what is a brain cell?" to "why does this repo compute z-scores on neighbor graphs of 1.9 million brain cells?"
+![Concept figure: the pipeline from donor brains to MERFISH cell maps, spatial neighbor graphs, niche clustering, and progression modeling.](figures/concept_figure.svg)
+
+*Figure: the whole project in one view — donor brains are sliced and imaged with MERFISH so every cell keeps its coordinates, cells are linked into a neighbor graph, neighborhoods are grouped into niches, and niche abundance is tracked against disease stage.*
+
+Welcome! This document assumes **no background** in neuroscience, biology, or academia. If you can read a map and follow a recipe, you can understand everything in this repository. We'll build up from "what is a brain cell?" to "why does this repo compute neighbor counts on graphs of 1.9 million brain cells?" — and every math idea is shown on a tiny five-cell example before any notation appears.
 
 If you want the shorter, more technical version, see [docs/INTRODUCTION.md](INTRODUCTION.md). For exactly *how* the analysis works (and what is done vs. planned), see [docs/METHODS.md](METHODS.md).
 
@@ -75,7 +79,7 @@ The real-data run (see `reports/seaad_merfish_run_summary.json`) analyzed **1,88
 
 ### Cells as a graph
 
-The core trick is to turn the cell map into a **graph** — the math kind: nodes (dots) and edges (lines). Each cell is a node; we connect each cell to its 6 nearest neighbors in space. Then "who sits next to whom" becomes a countable thing: count the edges connecting each pair of cell types.
+The core trick is to turn the cell map into a **graph** — not a chart, just dots and lines. Each cell is a dot; we draw a line between each cell and its closest neighbors in space. Then "who sits next to whom" becomes a countable thing: count the lines connecting each pair of cell types.
 
 ```mermaid
 graph TD
@@ -89,29 +93,53 @@ graph TD
     style D fill:#fc6
 ```
 
-### The key formulas
+### The key computations, built on a five-cell example
 
-We link to free learning resources instead of re-teaching basics. Each formula has one "what this number means" sentence.
+Every quantity in this pipeline is shown below on the same toy dataset first. Here it is — five cells on a tiny tissue section:
 
-**1. k-nearest-neighbor (k-NN) graph.** For each cell *i* with coordinates *xᵢ*, connect it to the *k* closest other cells by Euclidean distance, then symmetrize. We use **k = 6**.
+| cell | type | x | y |
+|---|---|---|---|
+| c1 | neuron | 0.0 | 0.0 |
+| c2 | neuron | 1.0 | 0.0 |
+| c3 | astrocyte | 0.8 | 1.0 |
+| c4 | microglia | 3.0 | 0.0 |
+| c5 | microglia | 3.2 | 0.8 |
 
-$$A_{ij} = 1 \text{ if } j \in \text{6 nearest neighbors of } i \text{ (or vice versa), else } 0$$
+**Computation 1: connect each cell to its closest neighbors (the k-NN graph).** How far apart are two cells? Just ruler distance on the coordinates — the same straight-line distance you'd measure on a map. From c1, the distances are: to c2 = 1.0, to c3 ≈ 1.3, to c4 = 3.0, to c5 ≈ 3.3. If we ask for each cell's **2 nearest neighbors** ("k = 2"), c1 links to c2 and c3. Repeat for all five cells: c4 and c5 link to each other and (at a stretch) to c2 or c3. Drawing those links gives a graph with two obvious clumps — the neuron/astrocyte clump and the microglia clump. The real run uses **k = 6** on 1.9 million cells.
 
-*What this means:* each cell's "neighborhood" is its 6 physically closest cells — the people at its dinner table. Learn more: [StatQuest on KNN](https://www.youtube.com/watch?v=HVXime0nQeI).
+Only after you've seen this do we write the shorthand:
 
-**2. Neighborhood enrichment z-score.** For each ordered pair of cell types (a, b), count edges between them, then compare against what you'd get if cell-type labels were randomly shuffled across the fixed graph (100 shuffles):
+$$A_{ij} = 1 \text{ if } j \text{ is one of the 6 closest cells to } i \text{ (or vice versa), else } 0$$
+
+*What this means:* the symbol $A_{ij}$ is just a yes/no record of "did we draw a line between cell *i* and cell *j*?" — the toy example above, written compactly. "Vice versa" means a link counts even if only one of the two cells picked the other. Each cell's "neighborhood" is its 6 physically closest cells — the people at its dinner table. Learn more: [StatQuest on KNN](https://www.youtube.com/watch?v=HVXime0nQeI).
+
+**Computation 2: do some cell-type pairs sit together more than chance? (neighbor enrichment).** In the toy graph, count the lines by the types they connect. Say the finished graph has 6 lines, of which **0** connect a neuron to a microglia. Is 0 surprisingly low? You can't tell until you know what *random* looks like. So: keep all the dots and lines exactly where they are, but **shuffle the type labels** — deal the five labels (neuron, neuron, astrocyte, microglia, microglia) onto the five fixed positions like cards, at random — and recount. Do it five times and you might get neuron–microglia counts of 2, 1, 2, 3, 2: typically about 2, wiggling by roughly ±0.8 from deal to deal. Our real count (0) sits about (0 − 2)/0.8 = **2.5 wiggle-units below typical**. That number — distance from the typical random count, measured in units of shuffle-to-shuffle wiggle — is all a **z-score** is. The real run does 100 shuffles instead of 5.
+
+The shorthand, now that every piece has been shown:
 
 $$z_{a,b} = \frac{N^{obs}_{a,b} - \mu^{null}_{a,b}}{\sigma^{null}_{a,b}}$$
 
-*What this means:* **how many standard deviations above (or below) random chance** the observed neighbor count is. z = +3 means the pair sits together far more than chance; z = −3 means they avoid each other. Learn more: [StatQuest on p-values and permutation tests](https://www.youtube.com/watch?v=5Dnw46eC-0o), [Seeing Theory](https://seeing-theory.brown.edu/).
+*What this means:* $N^{obs}$ is the real count (our 0), $\mu^{null}$ is the typical shuffled count (our 2), and $\sigma^{null}$ is the wiggle (our 0.8). z = +3 means the pair sits together far more than chance; z = −3 means they avoid each other. Learn more: [StatQuest on p-values and permutation tests](https://www.youtube.com/watch?v=5Dnw46eC-0o), [Seeing Theory](https://seeing-theory.brown.edu/).
 
 In our real run, the **most enriched pair was L4 IT – L5 IT (z = 31.2 ± 1.7)** — neighboring-layer excitatory neurons sit together, as cortical anatomy says they should (a good sanity check). The **most depleted pair was L2/3 IT – Oligodendrocyte (z = −55.3 ± 3.4)** — neurons of the upper layers and myelin-making glia almost never neighbor each other, consistent with oligodendrocytes concentrating in white matter.
 
-**3. Spearman rank correlation (for progression, planned).** To test whether a niche's abundance tracks the disease continuum, correlate each donor's niche fraction with the donor's pseudo-progression score using ranks, not raw values:
+**Computation 3: does a niche grow or shrink as disease advances? (rank correlation, planned).** Work the tiny example first. Five donors, ordered by their pseudo-progression score, and the fraction of each donor's cells sitting in one particular niche:
 
-$$r_s = \text{Pearson correlation of } \operatorname{rank}(\text{niche abundance}) \text{ vs. } \operatorname{rank}(\text{score})$$
+| donor | progression score | score rank | niche fraction | fraction rank |
+|---|---|---|---|---|
+| d1 | 0.10 | 1 | 12% | 5 |
+| d2 | 0.40 | 2 | 10% | 4 |
+| d3 | 0.60 | 3 | 9% | 3 |
+| d4 | 0.80 | 4 | 7% | 2 |
+| d5 | 0.95 | 5 | 5% | 1 |
 
-*What this means:* **does the niche monotonically grow or shrink as disease advances**, without assuming the relationship is a straight line or that scores are normally distributed. Learn more: [StatQuest on correlation](https://www.youtube.com/watch?v=xZ_z8KWkhXE), [Khan Academy on correlation](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data).
+Ignore the raw numbers and keep only the **ranks** (who is 1st, 2nd, …). Here the two rank columns march in perfect opposite order — as one goes up, the other goes down — which is the strongest possible decreasing relationship (correlation −1). Real data are messier; the correlation lands somewhere between −1 (perfectly decreasing), 0 (no pattern), and +1 (perfectly increasing). Using ranks instead of raw values means we never assume the relationship is a straight line or that the numbers follow any particular bell curve — only that "more disease" should mean "monotonically more or less of this niche."
+
+The shorthand for the procedure you just did by hand:
+
+$$r_s = \text{correlation of } \operatorname{rank}(\text{niche abundance}) \text{ vs. } \operatorname{rank}(\text{score})$$
+
+*What this means:* this is **Spearman rank correlation** — "Spearman" is just the name for "correlate the ranks, not the raw values." **Does the niche monotonically grow or shrink as disease advances**, with no other assumptions. Learn more: [StatQuest on correlation](https://www.youtube.com/watch?v=xZ_z8KWkhXE), [Khan Academy on correlation](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data).
 
 ### Where this sits in the series
 
