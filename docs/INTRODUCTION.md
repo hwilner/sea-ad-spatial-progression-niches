@@ -2,6 +2,10 @@
 
 **Series note:** This is **Paper 1 of 4** in the SEA-AD spatial Alzheimer's progression series. It is the first paper and does not build on any former paper. Papers 2 (snRNA→MERFISH state mapping), 3 (glial–neuronal signaling rewiring), and 4 (cross-region extension) all build on the dataset freezing, donor-level QC, and pseudo-progression modeling established here.
 
+![Concept figure: the pipeline from donor brains to MERFISH cell maps, spatial neighbor graphs, niche clustering, and progression modeling.](figures/concept_figure.svg)
+
+*Figure 1: The repository's pipeline in one view — donor brains are sliced and imaged with MERFISH so every cell keeps its coordinates, cells are linked into a nearest-neighbor graph, neighborhoods are clustered into niches, and niche abundance is modeled against disease stage. (Editable Mermaid source: [docs/figures/concept_figure.md](figures/concept_figure.md).)*
+
 ## Background
 
 Alzheimer's disease (AD) is the most common cause of dementia, and its defining brain pathology is well known: extracellular plaques of amyloid-β (Aβ) peptide and intracellular neurofibrillary tangles made of hyperphosphorylated tau protein. Pathology does not appear all at once — it accumulates over decades, following a stereotyped anatomical sequence first described by Braak and Braak, in which tau pathology begins in medial temporal regions and later engulfs the neocortex [1]. Yet pathology alone does not explain disease: what ultimately determines cognition is how the *cells* of the brain respond. The human cortex contains dozens of neuronal subtypes — excitatory glutamatergic neurons and inhibitory GABAergic interneurons of the Sst, Pvalb, and Vip families — embedded in a support tissue of glia: astrocytes (metabolic and synaptic support), microglia (resident immune cells), oligodendrocytes and their precursor cells, and vascular cells. Every one of these cell classes changes in AD.
