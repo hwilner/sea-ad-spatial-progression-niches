@@ -109,17 +109,21 @@ Every quantity in this pipeline is shown below on the same toy dataset first. He
 
 Only after you've seen this do we write the shorthand:
 
-$$A_{ij} = 1 \text{ if } j \text{ is one of the 6 closest cells to } i \text{ (or vice versa), else } 0$$
+```math
+A_{ij} = 1 \text{ if } j \text{ is one of the 6 closest cells to } i \text{ (or vice versa), else } 0
+```
 
-*What this means:* the symbol $A_{ij}$ is just a yes/no record of "did we draw a line between cell *i* and cell *j*?" — the toy example above, written compactly. "Vice versa" means a link counts even if only one of the two cells picked the other. Each cell's "neighborhood" is its 6 physically closest cells — the people at its dinner table. Learn more: [StatQuest on KNN](https://www.youtube.com/watch?v=HVXime0nQeI).
+*What this means:* the symbol $`A_{ij}`$ is just a yes/no record of "did we draw a line between cell *i* and cell *j*?" — the toy example above, written compactly. "Vice versa" means a link counts even if only one of the two cells picked the other. Each cell's "neighborhood" is its 6 physically closest cells — the people at its dinner table. Learn more: [StatQuest on KNN](https://www.youtube.com/watch?v=HVXime0nQeI).
 
 **Computation 2: do some cell-type pairs sit together more than chance? (neighbor enrichment).** In the toy graph, count the lines by the types they connect. Say the finished graph has 6 lines, of which **0** connect a neuron to a microglia. Is 0 surprisingly low? You can't tell until you know what *random* looks like. So: keep all the dots and lines exactly where they are, but **shuffle the type labels** — deal the five labels (neuron, neuron, astrocyte, microglia, microglia) onto the five fixed positions like cards, at random — and recount. Do it five times and you might get neuron–microglia counts of 2, 1, 2, 3, 2: typically about 2, wiggling by roughly ±0.8 from deal to deal. Our real count (0) sits about (0 − 2)/0.8 = **2.5 wiggle-units below typical**. That number — distance from the typical random count, measured in units of shuffle-to-shuffle wiggle — is all a **z-score** is. The real run does 100 shuffles instead of 5.
 
 The shorthand, now that every piece has been shown:
 
-$$z_{a,b} = \frac{N^{obs}_{a,b} - \mu^{null}_{a,b}}{\sigma^{null}_{a,b}}$$
+```math
+z_{a,b} = \frac{N^{obs}_{a,b} - \mu^{null}_{a,b}}{\sigma^{null}_{a,b}}
+```
 
-*What this means:* $N^{obs}$ is the real count (our 0), $\mu^{null}$ is the typical shuffled count (our 2), and $\sigma^{null}$ is the wiggle (our 0.8). z = +3 means the pair sits together far more than chance; z = −3 means they avoid each other. Learn more: [StatQuest on p-values and permutation tests](https://www.youtube.com/watch?v=5Dnw46eC-0o), [Seeing Theory](https://seeing-theory.brown.edu/).
+*What this means:* $`N^{obs}`$ is the real count (our 0), $`\mu^{null}`$ is the typical shuffled count (our 2), and $`\sigma^{null}`$ is the wiggle (our 0.8). z = +3 means the pair sits together far more than chance; z = −3 means they avoid each other. Learn more: [StatQuest on p-values and permutation tests](https://www.youtube.com/watch?v=5Dnw46eC-0o), [Seeing Theory](https://seeing-theory.brown.edu/).
 
 In our real run, the **most enriched pair was L4 IT – L5 IT (z = 31.2 ± 1.7)** — neighboring-layer excitatory neurons sit together, as cortical anatomy says they should (a good sanity check). The **most depleted pair was L2/3 IT – Oligodendrocyte (z = −55.3 ± 3.4)** — neurons of the upper layers and myelin-making glia almost never neighbor each other, consistent with oligodendrocytes concentrating in white matter.
 
@@ -137,7 +141,9 @@ Ignore the raw numbers and keep only the **ranks** (who is 1st, 2nd, …). Here 
 
 The shorthand for the procedure you just did by hand:
 
-$$r_s = \text{correlation of } \operatorname{rank}(\text{niche abundance}) \text{ vs. } \operatorname{rank}(\text{score})$$
+```math
+r_s = \text{correlation of } \operatorname{rank}(\text{niche abundance}) \text{ vs. } \operatorname{rank}(\text{score})
+```
 
 *What this means:* this is **Spearman rank correlation** — "Spearman" is just the name for "correlate the ranks, not the raw values." **Does the niche monotonically grow or shrink as disease advances**, with no other assumptions. Learn more: [StatQuest on correlation](https://www.youtube.com/watch?v=xZ_z8KWkhXE), [Khan Academy on correlation](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data).
 
