@@ -1,12 +1,16 @@
 # Extended Introduction — A Zero-Background Guide to This Project
 
-![Concept figure: the pipeline from donor brains to MERFISH cell maps, spatial neighbor graphs, niche clustering, and progression modeling.](figures/concept_figure.svg)
+![Concept figure: the pipeline from donor brains to MERFISH cell maps, spatial neighbor graphs, niche clustering, and progression modeling.](figures/01-concept-schematic.png)
 
 *Figure: the whole project in one view — donor brains are sliced and imaged with MERFISH so every cell keeps its coordinates, cells are linked into a neighbor graph, neighborhoods are grouped into niches, and niche abundance is tracked against disease stage.*
 
 Welcome! This document assumes **no background** in neuroscience, biology, or academia. If you can read a map and follow a recipe, you can understand everything in this repository. We'll build up from "what is a brain cell?" to "why does this repo compute neighbor counts on graphs of 1.9 million brain cells?" — and every math idea is shown on a tiny five-cell example before any notation appears.
 
 If you want the shorter, more technical version, see [docs/INTRODUCTION.md](INTRODUCTION.md). For exactly *how* the analysis works (and what is done vs. planned), see [docs/METHODS.md](METHODS.md).
+
+![Data collection and measurement workflow: postmortem donor brain tissue is sectioned, and MERFISH imaging records gene expression together with each cell's spatial coordinates](figures/02-data-collection.png)
+
+*Data workflow: Postmortem donor brain tissue is sectioned, and MERFISH imaging records gene expression together with each cell's spatial coordinates.*
 
 ## Part 1: Brains, cells, and why Alzheimer's is hard
 

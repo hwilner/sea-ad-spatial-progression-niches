@@ -2,7 +2,7 @@
 
 **Series note:** This is **Paper 1 of 4** in the SEA-AD spatial Alzheimer's progression series. It is the first paper and does not build on any former paper. Papers 2 (snRNA→MERFISH state mapping), 3 (glial–neuronal signaling rewiring), and 4 (cross-region extension) all build on the dataset freezing, donor-level QC, and pseudo-progression modeling established here.
 
-![Concept figure: the pipeline from donor brains to MERFISH cell maps, spatial neighbor graphs, niche clustering, and progression modeling.](figures/concept_figure.svg)
+![Concept figure: the pipeline from donor brains to MERFISH cell maps, spatial neighbor graphs, niche clustering, and progression modeling.](figures/01-concept-schematic.png)
 
 *Figure 1: The repository's pipeline in one view — donor brains are sliced and imaged with MERFISH so every cell keeps its coordinates, cells are linked into a nearest-neighbor graph, neighborhoods are clustered into niches, and niche abundance is modeled against disease stage. (Editable Mermaid source: [docs/figures/concept_figure.md](figures/concept_figure.md).)*
 
