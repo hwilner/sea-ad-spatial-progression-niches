@@ -56,22 +56,22 @@ def assign_niches(
     Parameters
     ----------
     composition:
-        Output of :func:`seaad_niches.spatial.neighbor_composition`
-        (cells x cell types).
+    Output of :func:`seaad_niches.spatial.neighbor_composition`
+    (cells x cell types).
     n_clusters:
-        Number of niches. With ``method="leiden"`` this is a target only
-        if the k-means fallback ends up being used; Leiden chooses its own
-        partition size.
+    Number of niches. With ``method="leiden"`` this is a target only
+    if the k-means fallback ends up being used; Leiden chooses its own
+    partition size.
     method:
-        ``"auto"`` (Leiden if importable, else k-means), ``"leiden"``
-        (raise if unavailable), or ``"kmeans"``.
+    ``"auto"`` (Leiden if importable, else k-means), ``"leiden"``
+    (raise if unavailable), or ``"kmeans"``.
     seed:
-        RNG seed for reproducibility.
+    RNG seed for reproducibility.
 
-    Returns
+    Returns:
     -------
     numpy.ndarray
-        Integer niche label per cell, length n_cells.
+    Integer niche label per cell, length n_cells.
     """
     x = composition.to_numpy(dtype=float)
     if x.shape[0] < n_clusters:

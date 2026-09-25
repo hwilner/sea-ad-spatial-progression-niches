@@ -22,18 +22,18 @@ def build_neighbor_graph(
     Parameters
     ----------
     coords:
-        Array of shape (n_cells, 2) with x, y coordinates.
+    Array of shape (n_cells, 2) with x, y coordinates.
     k:
-        Number of nearest neighbors per cell (mutual symmetrization).
-        Ignored when ``radius`` is given.
+    Number of nearest neighbors per cell (mutual symmetrization).
+    Ignored when ``radius`` is given.
     radius:
-        If provided, connect all cell pairs within this distance
-        (radius graph) instead of a k-NN graph.
+    If provided, connect all cell pairs within this distance
+    (radius graph) instead of a k-NN graph.
 
-    Returns
+    Returns:
     -------
     scipy.sparse.csr_matrix
-        Symmetric binary adjacency matrix (n_cells, n_cells), zero diagonal.
+    Symmetric binary adjacency matrix (n_cells, n_cells), zero diagonal.
     """
     from sklearn.neighbors import NearestNeighbors
 
@@ -71,16 +71,16 @@ def neighbor_composition(
     Parameters
     ----------
     adj:
-        Binary adjacency matrix from :func:`build_neighbor_graph`.
+    Binary adjacency matrix from :func:`build_neighbor_graph`.
     labels:
-        Categorical cell-type label per cell (length n_cells).
+    Categorical cell-type label per cell (length n_cells).
 
-    Returns
+    Returns:
     -------
     pandas.DataFrame
-        Rows = cells, columns = cell types, values = fraction of neighbors
-        of each type (rows sum to 1 for cells with >= 1 neighbor; rows for
-        isolated cells are all zero).
+    Rows = cells, columns = cell types, values = fraction of neighbors
+    of each type (rows sum to 1 for cells with >= 1 neighbor; rows for
+    isolated cells are all zero).
     """
     labels = pd.Series(np.asarray(labels)).astype("category")
     cats = labels.cat.categories
@@ -110,19 +110,19 @@ def neighborhood_enrichment(
     Parameters
     ----------
     adj:
-        Binary adjacency matrix.
+    Binary adjacency matrix.
     labels:
-        Cell-type label per cell.
+    Cell-type label per cell.
     n_permutations:
-        Number of label permutations for the null distribution.
+    Number of label permutations for the null distribution.
     seed:
-        RNG seed for reproducibility.
+    RNG seed for reproducibility.
 
-    Returns
+    Returns:
     -------
     pandas.DataFrame
-        Square DataFrame (types x types) of z-scores. Positive values mean
-        the pair co-occurs as neighbors more often than expected by chance.
+    Square DataFrame (types x types) of z-scores. Positive values mean
+    the pair co-occurs as neighbors more often than expected by chance.
     """
     labels = pd.Series(np.asarray(labels)).astype("category")
     cats = list(labels.cat.categories)

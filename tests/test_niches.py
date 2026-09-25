@@ -20,6 +20,7 @@ def _best_overlap(true_labels, pred_labels):
 
 
 def test_kmeans_recovers_planted_niches():
+    """Test kmeans recovers planted niches."""
     tissue = simulate_tissue(
         n_donors=1,
         cells_per_donor=2000,
@@ -39,6 +40,7 @@ def test_kmeans_recovers_planted_niches():
 
 
 def test_assign_niches_is_deterministic():
+    """Test assign niches is deterministic."""
     tissue = simulate_tissue(n_donors=1, cells_per_donor=500, seed=5)
     adj = build_neighbor_graph(tissue.coords, k=8)
     comp = neighbor_composition(adj, tissue.cell_type)

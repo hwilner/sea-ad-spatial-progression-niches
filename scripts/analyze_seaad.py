@@ -34,6 +34,11 @@ from seaad_niches.spatial import (  # noqa: E402
 
 
 def main() -> int:
+    """Main.
+
+    Returns:
+        int: the result.
+    """
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--cache-dir", default="data/seaad")
     ap.add_argument("--reports-dir", default="reports")

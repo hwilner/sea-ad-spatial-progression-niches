@@ -12,6 +12,7 @@ from seaad_niches.spatial import build_neighbor_graph, neighbor_composition
 
 
 def test_deterministic_niche_assignment_on_synthetic_point_cloud():
+    """Test deterministic niche assignment on synthetic point cloud."""
     rng = np.random.default_rng(0)
     coords = rng.uniform(0, 1, size=(400, 2))
     labels = pd.Series(rng.choice(["A", "B"], size=400)).astype("category")
@@ -23,6 +24,7 @@ def test_deterministic_niche_assignment_on_synthetic_point_cloud():
 
 
 def test_graph_parameters_k_and_radius_are_exposed():
+    """Test graph parameters k and radius are exposed."""
     coords = np.array([[0.0, 0.0], [0.05, 0.0], [3.0, 3.0], [3.05, 3.0]])
     adj_k = build_neighbor_graph(coords, k=1)
     adj_r = build_neighbor_graph(coords, radius=0.1)

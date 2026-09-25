@@ -32,6 +32,11 @@ from seaad_niches.download import (  # noqa: E402
 
 
 def main() -> int:
+    """Main.
+
+    Returns:
+        int: the result.
+    """
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--cache-dir", default="data/seaad", help="staging directory")
     ap.add_argument("--key", default=DEFAULT_H5AD_KEY, help="S3 key to download")

@@ -7,6 +7,7 @@ from seaad_niches.simulate import simulate_tissue
 
 
 def test_detects_planted_progression_gradient():
+    """Test detects planted progression gradient."""
     tissue = simulate_tissue(
         n_donors=12,
         cells_per_donor=800,
@@ -34,6 +35,7 @@ def test_detects_planted_progression_gradient():
 
 def test_null_when_scores_shuffled_by_design():
     # Constant-score cohort: nothing to associate; r should be ~0/NaN-safe.
+    """Test null when scores shuffled by design."""
     tissue = simulate_tissue(n_donors=6, cells_per_donor=300, seed=2)
     scores = tissue.progression_score.copy()
     scores[:] = 0.5

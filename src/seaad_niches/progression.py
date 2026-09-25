@@ -25,22 +25,22 @@ def niche_progression_association(
     Parameters
     ----------
     niche_labels:
-        Niche label per cell.
+    Niche label per cell.
     donor_ids:
-        Donor identifier per cell (same length as ``niche_labels``).
+    Donor identifier per cell (same length as ``niche_labels``).
     scores:
-        Pseudo-progression score per donor, indexed by donor id.
+    Pseudo-progression score per donor, indexed by donor id.
     n_permutations:
-        Number of score permutations for the null distribution.
+    Number of score permutations for the null distribution.
     seed:
-        RNG seed.
+    RNG seed.
 
-    Returns
+    Returns:
     -------
     pandas.DataFrame
-        One row per niche with columns: ``spearman_r``, ``p_value``
-        (permutation-based, two-sided), and ``n_donors``. Multiple-testing
-        correction is left to the caller (e.g. Benjamini-Hochberg).
+    One row per niche with columns: ``spearman_r``, ``p_value``
+    (permutation-based, two-sided), and ``n_donors``. Multiple-testing
+    correction is left to the caller (e.g. Benjamini-Hochberg).
     """
     niche_labels = np.asarray(niche_labels)
     donor_ids = pd.Series(np.asarray(donor_ids))

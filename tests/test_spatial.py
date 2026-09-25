@@ -12,6 +12,7 @@ from seaad_niches.spatial import (
 
 
 def test_knn_graph_is_symmetric_with_expected_degrees():
+    """Test knn graph is symmetric with expected degrees."""
     rng = np.random.default_rng(1)
     coords = rng.uniform(0, 1, size=(200, 2))
     adj = build_neighbor_graph(coords, k=6)
@@ -22,6 +23,7 @@ def test_knn_graph_is_symmetric_with_expected_degrees():
 
 
 def test_radius_graph_connects_close_pairs():
+    """Test radius graph connects close pairs."""
     coords = np.array([[0.0, 0.0], [0.1, 0.0], [5.0, 5.0]])
     adj = build_neighbor_graph(coords, radius=0.5)
     assert adj[0, 1] == 1 and adj[1, 0] == 1
@@ -29,6 +31,7 @@ def test_radius_graph_connects_close_pairs():
 
 
 def test_composition_rows_are_fractions():
+    """Test composition rows are fractions."""
     coords = np.array(
         [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1]], dtype=float
     )
@@ -42,6 +45,7 @@ def test_composition_rows_are_fractions():
 
 def test_enrichment_recovers_planted_neighbor_pair():
     # Planted niches over-represent Astro-Micro co-occurrence.
+    """Test enrichment recovers planted neighbor pair."""
     tissue = simulate_tissue(n_donors=3, cells_per_donor=800, seed=7)
     adj = build_neighbor_graph(tissue.coords, k=6)
     z = neighborhood_enrichment(adj, tissue.cell_type, n_permutations=50, seed=7)
@@ -53,6 +57,7 @@ def test_enrichment_recovers_planted_neighbor_pair():
 
 
 def test_enrichment_is_null_on_random_labels():
+    """Test enrichment is null on random labels."""
     rng = np.random.default_rng(3)
     coords = rng.uniform(0, 1, size=(1000, 2))
     labels = pd.Series(rng.choice(["A", "B", "C"], size=1000))

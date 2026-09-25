@@ -30,6 +30,15 @@ def _make_fake_h5ad(path, n=30):
 
 
 def test_download_verifies_size_and_writes_manifest(tmp_path, monkeypatch):
+    """Test download verifies size and writes manifest.
+
+    Args:
+        tmp_path: tmp path.
+        monkeypatch: monkeypatch.
+
+    Returns:
+        The download verifies size and writes manifest.
+    """
     payload = b"fake-h5ad-bytes" * 100
     digest = hashlib.sha256(payload).hexdigest()
 
@@ -64,6 +73,15 @@ def test_download_verifies_size_and_writes_manifest(tmp_path, monkeypatch):
 
 
 def test_download_rejects_corrupt_payload(tmp_path, monkeypatch):
+    """Test download rejects corrupt payload.
+
+    Args:
+        tmp_path: tmp path.
+        monkeypatch: monkeypatch.
+
+    Returns:
+        The download rejects corrupt payload.
+    """
     payload = b"abc"
 
     class _Resp:
@@ -87,6 +105,11 @@ def test_download_rejects_corrupt_payload(tmp_path, monkeypatch):
 
 
 def test_verify_manifest_detects_tampering(tmp_path):
+    """Test verify manifest detects tampering.
+
+    Args:
+        tmp_path: tmp path.
+    """
     f = tmp_path / "f.bin"
     f.write_bytes(b"0123456789")
     (tmp_path / "MANIFEST.json").write_text(
@@ -98,6 +121,11 @@ def test_verify_manifest_detects_tampering(tmp_path):
 
 
 def test_load_merfish_cells_from_staged_cache(tmp_path):
+    """Test load merfish cells from staged cache.
+
+    Args:
+        tmp_path: tmp path.
+    """
     h5ad = tmp_path / "mini.h5ad"
     _make_fake_h5ad(h5ad)
     (tmp_path / "MANIFEST.json").write_text(json.dumps({"file": "mini.h5ad"}))
@@ -109,5 +137,10 @@ def test_load_merfish_cells_from_staged_cache(tmp_path):
 
 
 def test_load_merfish_still_gated_without_manifest(tmp_path):
+    """Test load merfish still gated without manifest.
+
+    Args:
+        tmp_path: tmp path.
+    """
     with pytest.raises(RuntimeError, match="SEA-AD data access"):
         io.load_merfish_cells(cache_dir=tmp_path)

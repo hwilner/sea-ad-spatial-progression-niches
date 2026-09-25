@@ -5,7 +5,7 @@ The SEA-AD MTG MERFISH dataset is *open access* (AWS Open Data Registry,
 data are staged locally these functions fail loudly and informatively.
 Stage the data with::
 
-    python scripts/download_seaad.py --cache-dir data/seaad
+python scripts/download_seaad.py --cache-dir data/seaad
 
 which downloads the public h5ad, verifies its checksum, and writes a
 ``MANIFEST.json`` into the cache directory. See docs/DATA_ACCESS.md.
@@ -66,13 +66,13 @@ def load_merfish_cells(
     written by ``scripts/download_seaad.py``); raises RuntimeError
     otherwise.
 
-    Returns
+    Returns:
     -------
     pandas.DataFrame
-        One row per cell with columns ``cell_id``, ``donor``, ``section``,
-        ``x``, ``y`` and ``cell_type`` (subclass-level annotation by
-        default; pass ``cell_type_level`` to choose another obs column,
-        e.g. ``"supertype"``). Coordinates are per-section microns.
+    One row per cell with columns ``cell_id``, ``donor``, ``section``,
+    ``x``, ``y`` and ``cell_type`` (subclass-level annotation by
+    default; pass ``cell_type_level`` to choose another obs column,
+    e.g. ``"supertype"``). Coordinates are per-section microns.
     """
     cache_dir = _require_access(cache_dir)
     import json
