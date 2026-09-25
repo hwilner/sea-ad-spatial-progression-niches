@@ -151,19 +151,6 @@ r_s = \text{correlation of } \operatorname{rank}(\text{niche abundance}) \text{ 
 
 *What this means:* this is **Spearman rank correlation** — "Spearman" is just the name for "correlate the ranks, not the raw values." **Does the niche monotonically grow or shrink as disease advances**, with no other assumptions. Learn more: [StatQuest on correlation](https://www.youtube.com/watch?v=xZ_z8KWkhXE), [Khan Academy on correlation](https://www.khanacademy.org/math/statistics-probability/describing-relationships-quantitative-data).
 
-### Where this sits in the series
-
-This is **Paper 1 of 4** — the foundation. Everything later papers do builds on the dataset handling, niche definitions, and progression modeling established here.
-
-```mermaid
-flowchart TD
-    P1["Paper 1 (THIS REPO)<br/>sea-ad-spatial-progression-niches<br/>Spatial niches + progression modeling"]
-    P2["Paper 2<br/>snRNA → MERFISH state mapping"]
-    P3["Paper 3<br/>Glial–neuronal signaling rewiring"]
-    P4["Paper 4<br/>Cross-region extension"]
-    P1 --> P2 --> P3
-    P1 --> P4
-```
 
 ## Part 4: The big questions and the honest limits
 

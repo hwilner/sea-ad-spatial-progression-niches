@@ -1,4 +1,4 @@
-# Concept Figure — Spatial Niche Remodeling Pipeline (Paper 1)
+# Concept Figure — Spatial Niche Remodeling Pipeline 
 
 > **Note.** The rendered concept figure is [`01-concept-schematic.png`](01-concept-schematic.png) in this folder — a generated scientific illustration. This file keeps the Mermaid source of the same diagram so it remains editable and re-renderable.
 
@@ -10,5 +10,5 @@ flowchart LR
     B --> C["3. Spatial neighbor graph<br/>k = 6 nearest neighbors<br/>per section"]
     C --> D["4. Niche clustering<br/>8 neighborhood types<br/>enrichment vs 100 label shuffles"]
     D --> E["5. Progression modeling<br/>niche abundance vs<br/>pseudo-progression, donor-level"]
-    E -.-> F["Frozen dataset + niches<br/>inherited by Papers 2-4"]
+    E -.-> F["Frozen dataset + niches<br/>shared openly"]
 ```

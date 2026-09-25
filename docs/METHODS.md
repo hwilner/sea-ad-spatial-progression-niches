@@ -114,7 +114,7 @@ flowchart TD
 
 ## Data-science hygiene concepts
 
-**Train/test hygiene.** This project currently does descriptive analysis, not prediction, so there is no train/test split yet. When Paper 1's question 3 ("can spatial features predict stage?") is tackled, donors — never individual cells — must be the split unit, for the same pseudoreplication reason. Any preprocessing that uses labels (e.g., feature selection) must happen inside the cross-validation loop.
+**Train/test hygiene.** This project currently does descriptive analysis, not prediction, so there is no train/test split yet. When the prediction question ("can spatial features predict stage?") is tackled, donors — never individual cells — must be the split unit, for the same pseudoreplication reason. Any preprocessing that uses labels (e.g., feature selection) must happen inside the cross-validation loop.
 
 **Seeds and reproducibility.** Every stochastic step takes an explicit `seed` (the real run used seed 0): permutation shuffles, k-means (`random_state`), Leiden. The download is integrity-checked with SHA-256 and recorded in `MANIFEST.json`. If you add randomness, add a seed parameter — no exceptions.
 

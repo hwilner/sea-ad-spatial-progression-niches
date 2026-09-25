@@ -1,10 +1,6 @@
-# SEA-AD Spatial Progression Niches (Paper 1)
+# SEA-AD Spatial Progression Niches 
 
 This independent research repository plans and tracks a spatial analysis of cell-type neighborhood remodeling along the Alzheimer's disease pseudo-progression continuum in the SEA-AD atlas. It provides analysis utilities plus a one-command pipeline over the **open** SEA-AD MTG MERFISH dataset (no DUA required).
-
-## Series position
-
-This is **Paper 1** of the SEA-AD spatial Alzheimer's progression series (4 papers). It is the foundation of the series; Papers 2–4 build on its outputs.
 
 ## Research plan
 

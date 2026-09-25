@@ -1,6 +1,4 @@
-# Introduction — Paper 1: Spatial Niche Remodeling along Alzheimer's Progression (SEA-AD)
-
-**Series note:** This is **Paper 1 of 4** in the SEA-AD spatial Alzheimer's progression series. It is the first paper and does not build on any former paper. Papers 2 (snRNA→MERFISH state mapping), 3 (glial–neuronal signaling rewiring), and 4 (cross-region extension) all build on the dataset freezing, donor-level QC, and pseudo-progression modeling established here.
+# Introduction — Spatial Niche Remodeling along Alzheimer's Progression (SEA-AD)
 
 ![Concept figure: the pipeline from donor brains to MERFISH cell maps, spatial neighbor graphs, niche clustering, and progression modeling.](figures/01-concept-schematic.png)
 
@@ -37,13 +35,13 @@ Published analyses of SEA-AD and comparable atlases have concentrated on differe
 
 ## Methods
 
-We first freeze a quality-controlled, donor-level analytical dataset (harmonized cell-type labels, covariates, pseudo-progression scores) that all later papers in this series inherit. On the MERFISH sections, we construct k-nearest-neighbor spatial graphs, compute neighborhood composition vectors per cell, and cluster these into niches using graph-aware spatial clustering (BayesSpace-style approaches [11]). Neighbor-enrichment statistics are computed against label-permutation null models within the Squidpy framework [12]. At the donor level, niche composition and spatial graph metrics are modeled against pseudo-progression using generalized additive models with covariate adjustment (age, sex, postmortem interval) and donor-level permutation tests to control false positives.
+We first freeze a quality-controlled, donor-level analytical dataset (harmonized cell-type labels, covariates, pseudo-progression scores) that later studies can reuse directly. On the MERFISH sections, we construct k-nearest-neighbor spatial graphs, compute neighborhood composition vectors per cell, and cluster these into niches using graph-aware spatial clustering (BayesSpace-style approaches [11]). Neighbor-enrichment statistics are computed against label-permutation null models within the Squidpy framework [12]. At the donor level, niche composition and spatial graph metrics are modeled against pseudo-progression using generalized additive models with covariate adjustment (age, sex, postmortem interval) and donor-level permutation tests to control false positives.
 
 ## Expected contributions
 
 - A quantitative map of which spatial niches remodel, and in what order, along AD progression in MTG.
 - A test of whether spatial organization carries disease-stage information beyond cell-type proportions.
-- A frozen dataset and open, reproducible pipeline that serve as the shared foundation for Papers 2–4.
+- A frozen dataset and open, reproducible pipeline that serve as a shared, openly reusable foundation.
 
 ## Scope and boundary
 
