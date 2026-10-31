@@ -32,10 +32,14 @@ from seaad_niches.download import (  # noqa: E402
 
 
 def main() -> int:
-    """Main.
+    """Download, verify, or list the staged SEA-AD MTG MERFISH dataset.
+
+    Parses command-line arguments and dispatches to bucket listing
+    (``--list``), manifest re-verification (``--verify-only``), or a
+    streamed download with integrity checks and manifest writing.
 
     Returns:
-        int: the result.
+        Process exit code (0 on success).
     """
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--cache-dir", default="data/seaad", help="staging directory")

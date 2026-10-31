@@ -22,25 +22,24 @@ def niche_progression_association(
 ) -> pd.DataFrame:
     """Correlate per-donor niche abundance with pseudo-progression scores.
 
-    Parameters
-    ----------
-    niche_labels:
-    Niche label per cell.
-    donor_ids:
-    Donor identifier per cell (same length as ``niche_labels``).
-    scores:
-    Pseudo-progression score per donor, indexed by donor id.
-    n_permutations:
-    Number of score permutations for the null distribution.
-    seed:
-    RNG seed.
+    Args:
+        niche_labels: Niche label per cell.
+        donor_ids: Donor identifier per cell (same length as
+            ``niche_labels``).
+        scores: Pseudo-progression score per donor, indexed by donor id.
+        n_permutations: Number of score permutations for the null
+            distribution.
+        seed: RNG seed.
 
     Returns:
-    -------
-    pandas.DataFrame
-    One row per niche with columns: ``spearman_r``, ``p_value``
-    (permutation-based, two-sided), and ``n_donors``. Multiple-testing
-    correction is left to the caller (e.g. Benjamini-Hochberg).
+        ``pandas.DataFrame`` with one row per niche and columns
+        ``spearman_r``, ``p_value`` (permutation-based, two-sided), and
+        ``n_donors``. Multiple-testing correction is left to the caller
+        (e.g. Benjamini-Hochberg).
+
+    Raises:
+        ValueError: If ``scores`` has no entry for one or more donors
+            present in ``donor_ids``.
     """
     niche_labels = np.asarray(niche_labels)
     donor_ids = pd.Series(np.asarray(donor_ids))

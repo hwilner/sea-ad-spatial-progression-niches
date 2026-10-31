@@ -34,10 +34,14 @@ from seaad_niches.spatial import (  # noqa: E402
 
 
 def main() -> int:
-    """Main.
+    """Run the spatial pipeline on staged SEA-AD MTG MERFISH cells.
+
+    Parses command-line arguments, loads the staged cell table, runs the
+    per-section neighbor-enrichment and niche-detection analysis, and
+    writes the aggregated CSV/JSON reports.
 
     Returns:
-        int: the result.
+        Process exit code (0 on success).
     """
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--cache-dir", default="data/seaad")

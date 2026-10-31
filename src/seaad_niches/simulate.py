@@ -16,17 +16,14 @@ class SyntheticTissue:
     """Container for one synthetic tissue section.
 
     Attributes:
-    ----------
-    coords:
-    (n_cells, 2) x, y coordinates.
-    cell_type:
-    Cell-type label per cell (pandas Series of category dtype).
-    true_niche:
-    Ground-truth planted niche label per cell (0 = background).
-    donor:
-    Donor id per cell.
-    progression_score:
-    Donor-level pseudo-progression score (pandas Series indexed by donor).
+        coords: (n_cells, 2) x, y coordinates.
+        cell_type: Cell-type label per cell (pandas Series of category
+            dtype).
+        true_niche: Ground-truth planted niche label per cell
+            (0 = background).
+        donor: Donor id per cell.
+        progression_score: Donor-level pseudo-progression score (pandas
+            Series indexed by donor).
     """
 
     coords: np.ndarray
@@ -57,28 +54,33 @@ def simulate_tissue(
     ``progression_niche``'s planted area fraction scales linearly with the
     donor's pseudo-progression score, giving a planted abundance gradient.
 
-    Parameters
-    ----------
-    n_donors, cells_per_donor:
-    Cohort and tissue size.
-    cell_types:
-    Background cell-type vocabulary (sampled uniformly).
-    planted_niche_types:
-    The two cell types enriched inside planted niches.
-    niche_type_pairs:
-    Optional per-niche cell-type signature pairs (cycled over niche
-    centers). If None, every niche uses ``planted_niche_types``.
-    n_niche_centers, niche_radius:
-    Number of niche centers per tissue and their radius (in unit-square
-    coordinates).
-    niche_fraction:
-    Fraction of cells assigned to planted niches at score = 0.5.
-    progression_niche:
-    Which planted niche index scales with the progression score.
-    progression_slope:
-    Strength of the abundance-vs-score relationship.
-    seed:
-    RNG seed.
+    Args:
+        n_donors: Number of donors in the simulated cohort.
+        cells_per_donor: Number of cells per donor tissue.
+        cell_types: Background cell-type vocabulary (sampled uniformly).
+        planted_niche_types: The two cell types enriched inside planted
+            niches.
+        niche_type_pairs: Optional per-niche cell-type signature pairs
+            (cycled over niche centers). If None, every niche uses
+            ``planted_niche_types``.
+        n_niche_centers: Number of niche centers per tissue.
+        niche_radius: Radius of each niche, in unit-square coordinates.
+        niche_fraction: Fraction of cells assigned to planted niches at
+            score = 0.5.
+        progression_niche: Which planted niche index scales with the
+            progression score.
+        progression_slope: Strength of the abundance-vs-score
+            relationship.
+        seed: RNG seed.
+
+    Returns:
+        A :class:`SyntheticTissue` with the simulated coordinates,
+        cell types, planted niche labels, donor ids, and donor-level
+        progression scores.
+
+    Raises:
+        ValueError: If a planted niche cell type is not in
+            ``cell_types``.
     """
     rng = np.random.default_rng(seed)
     cell_types = list(cell_types)

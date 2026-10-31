@@ -19,21 +19,21 @@ def build_neighbor_graph(
 ) -> csr_matrix:
     """Build a symmetric neighbor graph over 2D coordinates.
 
-    Parameters
-    ----------
-    coords:
-    Array of shape (n_cells, 2) with x, y coordinates.
-    k:
-    Number of nearest neighbors per cell (mutual symmetrization).
-    Ignored when ``radius`` is given.
-    radius:
-    If provided, connect all cell pairs within this distance
-    (radius graph) instead of a k-NN graph.
+    Args:
+        coords: Array of shape (n_cells, 2) with x, y coordinates.
+        k: Number of nearest neighbors per cell (mutual symmetrization).
+            Ignored when ``radius`` is given.
+        radius: If provided, connect all cell pairs within this distance
+            (radius graph) instead of a k-NN graph.
 
     Returns:
-    -------
-    scipy.sparse.csr_matrix
-    Symmetric binary adjacency matrix (n_cells, n_cells), zero diagonal.
+        Symmetric binary adjacency matrix (n_cells, n_cells) with a zero
+        diagonal, as a ``scipy.sparse.csr_matrix``.
+
+    Raises:
+        ValueError: If ``coords`` does not have shape (n_cells, 2), if
+            ``radius`` is not positive, or if ``k`` is out of range for
+            the number of cells.
     """
     from sklearn.neighbors import NearestNeighbors
 
@@ -68,19 +68,14 @@ def neighbor_composition(
 ) -> pd.DataFrame:
     """Compute each cell's neighbor cell-type composition.
 
-    Parameters
-    ----------
-    adj:
-    Binary adjacency matrix from :func:`build_neighbor_graph`.
-    labels:
-    Categorical cell-type label per cell (length n_cells).
+    Args:
+        adj: Binary adjacency matrix from :func:`build_neighbor_graph`.
+        labels: Categorical cell-type label per cell (length n_cells).
 
     Returns:
-    -------
-    pandas.DataFrame
-    Rows = cells, columns = cell types, values = fraction of neighbors
-    of each type (rows sum to 1 for cells with >= 1 neighbor; rows for
-    isolated cells are all zero).
+        ``pandas.DataFrame`` with rows = cells, columns = cell types, and
+        values = fraction of neighbors of each type. Rows sum to 1 for
+        cells with >= 1 neighbor; rows for isolated cells are all zero.
     """
     labels = pd.Series(np.asarray(labels)).astype("category")
     cats = labels.cat.categories
@@ -107,22 +102,17 @@ def neighborhood_enrichment(
     a-b adjacencies is compared against the distribution obtained by
     permuting labels while keeping the graph fixed.
 
-    Parameters
-    ----------
-    adj:
-    Binary adjacency matrix.
-    labels:
-    Cell-type label per cell.
-    n_permutations:
-    Number of label permutations for the null distribution.
-    seed:
-    RNG seed for reproducibility.
+    Args:
+        adj: Binary adjacency matrix.
+        labels: Cell-type label per cell.
+        n_permutations: Number of label permutations for the null
+            distribution.
+        seed: RNG seed for reproducibility.
 
     Returns:
-    -------
-    pandas.DataFrame
-    Square DataFrame (types x types) of z-scores. Positive values mean
-    the pair co-occurs as neighbors more often than expected by chance.
+        Square ``pandas.DataFrame`` (types x types) of z-scores. Positive
+        values mean the pair co-occurs as neighbors more often than
+        expected by chance.
     """
     labels = pd.Series(np.asarray(labels)).astype("category")
     cats = list(labels.cat.categories)

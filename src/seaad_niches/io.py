@@ -62,17 +62,23 @@ def load_merfish_cells(
 ) -> pd.DataFrame:
     """Load the SEA-AD MERFISH (MTG) cell table with x/y coordinates.
 
-    Requires the staged open dataset (``MANIFEST.json`` in ``cache_dir``,
-    written by ``scripts/download_seaad.py``); raises RuntimeError
-    otherwise.
+    Args:
+        cache_dir: Directory containing the staged dataset with its
+            ``MANIFEST.json`` (written by ``scripts/download_seaad.py``).
+        cell_type_level: Optional name of the ``obs`` column to use as
+            the cell-type annotation (e.g. ``"supertype"``); defaults to
+            subclass-level annotation.
 
     Returns:
-    -------
-    pandas.DataFrame
-    One row per cell with columns ``cell_id``, ``donor``, ``section``,
-    ``x``, ``y`` and ``cell_type`` (subclass-level annotation by
-    default; pass ``cell_type_level`` to choose another obs column,
-    e.g. ``"supertype"``). Coordinates are per-section microns.
+        ``pandas.DataFrame`` with one row per cell and columns
+        ``cell_id``, ``donor``, ``section``, ``x``, ``y``, and
+        ``cell_type``. Coordinates are per-section microns.
+
+    Raises:
+        RuntimeError: If the dataset has not been staged (no
+            ``MANIFEST.json`` in ``cache_dir``).
+        KeyError: If an expected coordinate, donor, section, or
+            cell-type column cannot be resolved in the staged file.
     """
     cache_dir = _require_access(cache_dir)
     import json
@@ -111,7 +117,16 @@ def load_merfish_cells(
 def load_snrnaseq_reference(cache_dir: str | Path | None = None):
     """Load the SEA-AD snRNA-seq reference used for cell-type mapping.
 
-    Requires SEA-AD data access; raises RuntimeError otherwise.
+    Args:
+        cache_dir: Directory containing the staged dataset manifest.
+
+    Raises:
+        RuntimeError: If the dataset has not been staged.
+        NotImplementedError: Always; snRNA-seq reference loading is not
+            implemented yet (the MERFISH cells loaded by
+            :func:`load_merfish_cells` already carry mapped
+            subclass/supertype annotations, which is what the spatial
+            pipeline consumes).
     """
     _require_access(cache_dir)
     raise NotImplementedError(
