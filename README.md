@@ -24,9 +24,9 @@ Completed and pre-registered results are collected, in paper style with captions
 | Top enriched neighbor pair | L4 IT–L5 IT, mean z = 31.20 ± 1.74 | `reports/seaad_merfish_top_pairs.csv` (RESULTS.md Table 2) |
 | Top depleted neighbor pair | L2/3 IT–Oligodendrocyte, mean z = −55.32 ± 3.44 | `reports/seaad_merfish_top_pairs.csv` (RESULTS.md Table 2) |
 | Niche detection | 8 stable niches per section in all 69 sections; largest-niche fraction 0.202 ± 0.033 | `reports/seaad_merfish_niche_summary.csv` (RESULTS.md Table 3) |
-| Validation | Synthetic suite: 18 passed, 0 failed, 1 skipped | RESULTS.md Table 6 |
+| Validation | Synthetic suite: 22 passed, 0 failed, 1 skipped | RESULTS.md Table 6 |
 
-Niche–progression association modeling is pre-registered (RESULTS.md Tables 4–5, Figures 1–2) and awaits donor-level pseudo-progression scores.
+Niche–progression association modeling is pre-registered (`docs/ANALYSIS_PLAN.md`), implemented, and synthetic-validated; real-data fitting awaits donor-level pseudo-progression scores and covariates (RESULTS.md Tables 4–5, Figures 1–2).
 
 ### Planned work (issue-mapped)
 
@@ -34,11 +34,11 @@ Niche–progression association modeling is pre-registered (RESULTS.md Tables 4�
 |---|---|---|
 | SEA-AD MERFISH + snRNA-seq ingestion and QC | A fixed, versioned analytical dataset spanning the pseudo-progression score. | #5 (done), #16, #17, #15, #2 |
 | Spatial niche detection per donor | Quantitative niche maps per donor and disease stage. | #3 (done), #14 |
-| Niche–progression association modeling | Identification of neighborhoods that remodel along pseudo-progression. | #7, #10, #6, #8, #12, #22, #23 |
-| Sensitivity and null analyses | Negative-control niches and label-shuffle nulls; no causal claims. | #9, #1, #19, #20, #21, #18 |
+| Niche–progression association modeling | Identification of neighborhoods that remodel along pseudo-progression. | #7 (plan), #10 (model), #6, #8, #12, #22, #23 |
+| Sensitivity and null analyses | Negative-control niches and label-shuffle nulls; no causal claims. | #9, #1, #19 (harness), #20, #21, #18 |
 | Results package and manuscript | Frozen results package, reproducibility re-run, Paper 1 outline. | #4, #11, #13 |
 
-**Current status:** the open SEA-AD MTG MERFISH dataset (Gabitto et al. 2024; AWS Open Data Registry) is scripted, checksummed, and cached by `scripts/download_seaad.py`; neighbor enrichment and niche detection run end-to-end on real cells via `scripts/analyze_seaad.py` (aggregates in `reports/`). Pseudo-progression association modeling awaits donor-level scores.
+**Current status:** the open SEA-AD MTG MERFISH dataset (Gabitto et al. 2024; AWS Open Data Registry) is scripted, checksummed, and cached by `scripts/download_seaad.py`; neighbor enrichment and niche detection run end-to-end on real cells via `scripts/analyze_seaad.py` (aggregates in `reports/`). The pre-registered donor-level GAM and one-choice sensitivity harness are implemented and synthetic-smoke-tested; real-data progression modeling awaits donor-level scores and covariates.
 
 ## What is included
 
@@ -47,6 +47,7 @@ Niche–progression association modeling is pre-registered (RESULTS.md Tables 4�
 | `src/seaad_niches/spatial.py` | k-NN / radius neighbor-graph construction and neighborhood enrichment z-scores (label-permutation null). |
 | `src/seaad_niches/niches.py` | Niche assignment by clustering neighbor-composition vectors (Leiden if installed, deterministic k-means fallback). |
 | `src/seaad_niches/progression.py` | Donor-level niche abundance vs. pseudo-progression association (Spearman + score-permutation test). |
+| `src/seaad_niches/niche_progression.py` | Pre-registered covariate-adjusted GAM (cubic B-spline + age/sex/PMI), returning effect sizes with uncertainty. |
 | `src/seaad_niches/simulate.py` | Synthetic tissue generator with planted niches and a planted progression gradient. |
 | `src/seaad_niches/io.py` | SEA-AD loading interface; raises a clear "requires SEA-AD access" error until `scripts/download_seaad.py` has staged the open dataset (writes `MANIFEST.json`). |
 | `src/seaad_niches/download.py` | Public SEA-AD MTG MERFISH download/cache from the AWS Open Data Registry bucket with size + SHA-256 integrity checks. |
@@ -54,8 +55,9 @@ Niche–progression association modeling is pre-registered (RESULTS.md Tables 4�
 | `scripts/analyze_seaad.py` | Real-data pipeline: per-section neighbor enrichment + niche detection; writes small aggregates to `reports/`. |
 | `Makefile` | `make real-pipeline` = download + analyze; `make test` runs the suite. |
 | `reports/` | Small derived CSV/JSON aggregates from the real-data run (enrichment z-scores, niche summaries). |
-| `tests/` | Synthetic tests: planted neighbor enrichment, planted niche recovery, planted gradient detection, io gating, download/cache machinery (mocked network). |
-| `docs/` | Research status, methods scope, results, data-access status, data sources/versions, and contribution guidance. |
+| `analysis/sensitivity.py` | One-choice-at-a-time sensitivity harness with an explicit varied-choice log. |
+| `tests/` | Synthetic tests: planted neighbor enrichment, planted niche recovery, planted gradient detection, GAM recovery, sensitivity-harness smoke tests, io gating, download/cache machinery (mocked network). |
+| `docs/` | Research status, methods scope, pre-registered analysis plan, results, data-access status, data sources/versions, and contribution guidance. |
 | `pyproject.toml` / `requirements.txt` | Src-layout package `seaad_niches` (Python >= 3.10); core deps numpy, pandas, scipy, scikit-learn. |
 | `CONTRIBUTING.md` | Setup, testing, backlog workflow, code style (ruff), and PR process. |
 | `LICENSE` | MIT (copyright Harel Wilner 2026). |
@@ -84,6 +86,7 @@ Alzheimer's disease, SEA-AD, MERFISH, spatial transcriptomics, cell niches, comp
 - [Introduction for new readers](docs/INTRODUCTION.md)
 - [Extended introduction — zero-background guide](docs/EXTENDED_INTRODUCTION.md)
 - [Extended methods & materials](docs/METHODS.md)
+- [Pre-registered niche–progression analysis plan](docs/ANALYSIS_PLAN.md)
 - [Results — captioned paper-style tables](docs/RESULTS.md)
 - [SEA-AD data access status](docs/DATA_ACCESS.md)
 - [Data sources and versions](docs/DATA_SOURCES.md)

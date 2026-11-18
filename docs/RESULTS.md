@@ -75,18 +75,19 @@ bit-verified run summary (Table 1).
 ## Pre-registered result structures (pending analyses)
 
 **Table 4 (pre-registered; pending). Niche abundance vs.
-pseudo-progression associations.** One row per niche: Spearman r between
-donor-level niche abundance and the donor pseudo-progression score,
-two-sided score-permutation p-value, Benjamini–Hochberg q-value across
-niches, and n_donors. Analysis authorized by the pre-registration in
-issue #7 (GAM formula and null design), modeled under issue #6, table
-produced under issue #8. Blocked by the donor-level score/covariate
-table (issues #2, #15) — no pseudo-progression scores are committed
-yet, so this table is intentionally empty.
+pseudo-progression associations.** One row per niche: fitted GAM abundance
+contrast (`Q75 - Q25` pseudo-progression score), standard error, two-sided
+donor-shuffle permutation p-value, Benjamini–Hochberg q-value across
+niches, and n_donors. The exact model and null design are frozen in
+`docs/ANALYSIS_PLAN.md` (issue #7); the implementation is synthetically
+validated under issue #10; the real-data table is produced under issue #8.
+Blocked by the donor-level score/covariate table (issues #2, #15) — no
+pseudo-progression scores are committed yet, so this table is intentionally
+empty.
 
-| Niche | Spearman r | Permutation p | BH q | n_donors |
-|---|---|---|---|---|
-| — (pending issues #2/#15 → #7 → #6 → #8) | | | | |
+| Niche | GAM abundance contrast | SE | Donor-shuffle p | BH q | n_donors |
+|---|---|---|---|---|---|
+| — (pending issues #2/#15 → #6 → #8) | | | | | |
 
 **Table 5 (pre-registered; pending). Null-model and sensitivity family.**
 Label-shuffle and donor-shuffle null families (issue #9), the
@@ -110,19 +111,18 @@ curves.** Scripts under issues #12 and #22; docs summary under issue #23.
 
 **Table 6. Computational validation of the analysis codebase
 (completed).** Synthetic test suite (planted neighbor enrichment,
-planted niche recovery, planted progression-gradient detection, io
-gating, download/cache machinery with mocked network). Run this run on a
-clean-room copy of the committed files (git blob-SHA parity verified for
-all 13 source/test files against the `main` branch). The result
-reproduces the independent verification recorded in `results.md` on
-branch `mavis/verify-and-reproduce` (2026-09-29, Python 3.11). The
-`ConstantInputWarning` emitted during the constant-score null test is
-expected by design (undefined correlation on constant input, handled as
-NaN-safe zero).
+planted niche recovery, planted progression-gradient detection,
+pre-registered GAM recovery with uncertainty, one-choice sensitivity
+harness smoke tests, io gating, download/cache machinery with mocked
+network). The 2026-11-18 run validates the new analysis code on synthetic
+donor-level matrices only; no real SEA-AD progression result was fit or
+added. The `ConstantInputWarning` emitted during the constant-score null
+test is expected by design (undefined correlation on constant input,
+handled as NaN-safe zero).
 
 | Branch | Tests passed | Failed | Skipped | Wall clock | Environment |
 |---|---|---|---|---|---|
-| main | 18 | 0 | 1 | ~3 s | Python 3.12, CPU (numpy/pandas/scipy/scikit-learn) |
+| main | 22 | 0 | 1 | 1.51 s | Python 3.12, CPU (numpy/pandas/scipy/scikit-learn) |
 | mavis/verify-and-reproduce | 18 | 0 | 1 | 5.52 s | Python 3.11, CPU (recorded 2026-09-29 in branch `results.md`; branch = main + that file, so code is identical) |
 
 The single skipped test (`test_load_merfish_cells_from_staged_cache`)

@@ -1,18 +1,18 @@
 # Results
 
-**Generated 2026-11-02 by executing this repository's own test suite against the
+**Generated 2026-11-18 by executing this repository's own test suite against the
 current `main`.**
 
 ## Verification run
 
 | Metric | Value |
 |---|---|
-| Tests passed | **18** |
+| Tests passed | **22** |
 | Tests failed | 0 |
 | Errors | 0 |
 | Skipped | 1 |
-| Wall clock | 6.0 s |
-| Environment | Python 3.11, CPU-only, no GPU |
+| Wall clock | 1.5 s |
+| Environment | Python 3.12, CPU-only, no GPU |
 
 Reproduce with:
 
@@ -22,9 +22,10 @@ PYTHONPATH=$PWD:$PWD/src pytest -q
 
 ## What this establishes
 
-- The code imports cleanly and **18 tests pass with 0 failures**, 1 skipped.
-- That is real evidence, and it is the kind of evidence this project previously
-  lacked.
+- The code imports cleanly and **22 tests pass with 0 failures**, 1 skipped.
+- The suite now includes synthetic recovery of the pre-registered donor-level
+  GAM and an end-to-end smoke test of the one-choice sensitivity harness.
+- That is real computational evidence; it is not a biological finding.
 
 ## What this does NOT establish
 
