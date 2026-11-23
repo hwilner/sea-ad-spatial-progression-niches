@@ -1,0 +1,65 @@
+{
+  "manifest_type": "seaad_paper1_analytical_dataset",
+  "manifest_version": "1.0.0",
+  "created_utc": "2026-11-23T00:20:56+00:00",
+  "criteria_version": "paper1-freeze-v1",
+  "covariate_table_version": "paper1-donor-covariates-v1",
+  "qc_report_version": "paper1-qc-v1",
+  "source_dataset": {
+    "dataset": "SEA-AD MTG MERFISH",
+    "key": "middle-temporal-gyrus/all_donors-h5ad/SEAAD_MTG_MERFISH.2024-12-11.h5ad",
+    "source_url": "https://sea-ad-spatial-transcriptomics.s3.amazonaws.com/middle-temporal-gyrus/all_donors-h5ad/SEAAD_MTG_MERFISH.2024-12-11.h5ad",
+    "registry": "https://registry.opendata.aws/allen-sea-ad-atlas",
+    "citation": "Gabitto, Travaglini et al. (2024) Integrated multimodal cell atlas of Alzheimer's disease. Nature Neuroscience 27, 2366-2383. doi:10.1038/s41593-024-01774-5",
+    "file": "SEAAD_MTG_MERFISH.2024-12-11.h5ad",
+    "size_bytes": 497737587,
+    "sha256": "3e3dac22446a8ce66afd07c209cd74df260b2f3d7c4085ffe4732390d2054a24",
+    "access": "open (AWS Open Data Registry; no DUA required)"
+  },
+  "donors": {
+    "included": [
+      "H20.33.001",
+      "H20.33.004",
+      "H20.33.012",
+      "H20.33.015",
+      "H20.33.025",
+      "H20.33.035",
+      "H20.33.040",
+      "H20.33.044",
+      "H21.33.001",
+      "H21.33.005",
+      "H21.33.006",
+      "H21.33.011",
+      "H21.33.012",
+      "H21.33.013",
+      "H21.33.014",
+      "H21.33.015",
+      "H21.33.016",
+      "H21.33.019",
+      "H21.33.021",
+      "H21.33.022",
+      "H21.33.023",
+      "H21.33.025",
+      "H21.33.028",
+      "H21.33.031",
+      "H21.33.032",
+      "H21.33.038",
+      "H21.33.040"
+    ],
+    "excluded": [],
+    "n_included": 27
+  },
+  "sections": {
+    "n_total": 69,
+    "n_passed": 69,
+    "failed": []
+  },
+  "n_cells_in_passing_sections": 1887728,
+  "artifact_sha256": {
+    "reports/paper1_freeze/donor_covariates.csv": "fb2d573aacb77592e28c9ad15e2af1fd63f29052d6985fa14bb3371354d7e6f2",
+    "reports/paper1_freeze/section_qc.csv": "e3bf7b52487bf249aeabdb652a3e2e7e06c1ba8b2d135d5e94a41524156836e3",
+    "reports/paper1_freeze/qc_summary.json": "b94e219d6886ae595fa5d5d90775cf14ec1d3db9ad963468310e38f5bc4e601c",
+    "reports/paper1_freeze/qc_report.md": "7151225d4edafdc88f508e7202cac3ef0d83d4e665410be9a2068deed7c0e7ae"
+  },
+  "contains_raw_data": false
+}
