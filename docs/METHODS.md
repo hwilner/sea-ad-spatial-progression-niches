@@ -6,7 +6,8 @@ This document is written for new contributors who are **new to data science**. I
 
 ```mermaid
 flowchart TD
-    A["Open SEA-AD MTG MERFISH h5ad<br/>(AWS Open Data Registry, SHA-256 checked)"] --> B["Per-section k-NN graph<br/>build_neighbor_graph, k=6"]
+    A["Open SEA-AD MTG MERFISH h5ad<br/>(AWS Open Data Registry, SHA-256 checked)"] --> F0["DONE: Paper 1 technical freeze<br/>27 donors, 69 sections, 1,887,728 QC-passing cells"]
+    F0 --> B["Per-section k-NN graph<br/>build_neighbor_graph, k=6"]
     B --> C["Neighbor composition per cell<br/>fraction of neighbors of each of 24 types"]
     B --> D["Neighbor enrichment z-scores<br/>100 label permutations, per section"]
     C --> E["Niche assignment<br/>k-means (k=8) or Leiden"]
@@ -22,11 +23,12 @@ These components exist, run end-to-end on the real data, and are covered by test
 | Component | Where | Status |
 |---|---|---|
 | Download + integrity-check open MERFISH data (~500 MB h5ad) | `src/seaad_niches/download.py`, `scripts/download_seaad.py` | Done — size + SHA-256 verified, cached |
+| Paper 1 donor/covariate freeze + technical QC | `src/seaad_niches/dataset_freeze.py`, `scripts/freeze_paper1_dataset.py`, `docs/DATASET_FREEZE.md` | Done — 27/27 donors, 69/69 sections, 1,887,728/1,887,729 cells retained; hashed manifest committed |
 | Per-section k-NN neighbor graphs (k = 6) | `src/seaad_niches/spatial.py` | Done — 69 sections |
 | Neighbor-enrichment z-scores (100 permutations, label-shuffle null) | `src/seaad_niches/spatial.py` | Done — aggregates in `reports/` |
 | Niche detection (8 niches per section; Leiden if installed, k-means fallback) | `src/seaad_niches/niches.py` | Done |
 | Synthetic validation: planted enrichment, planted niche recovery, planted gradient, io gating, mocked-network download tests | `src/seaad_niches/simulate.py`, `tests/` | Done — `make test` |
-| Pre-registered covariate-adjusted donor-level GAM | `docs/ANALYSIS_PLAN.md`, `src/seaad_niches/niche_progression.py` | Implemented; synthetic recovery tested; real-data fit blocked by #2/#15 |
+| Pre-registered covariate-adjusted donor-level GAM | `docs/ANALYSIS_PLAN.md`, `src/seaad_niches/niche_progression.py` | Implemented; synthetic recovery tested; real-data fit awaits QC-aware niche abundance aggregation and null runs |
 | One-choice-at-a-time sensitivity harness | `analysis/sensitivity.py` | Implemented; synthetic smoke test passes |
 
 **Real-data results so far** (`reports/seaad_merfish_run_summary.json`): 1,888,729 cells, 27 donors, 69 sections, 24 cell-type subclasses, k = 6, 100 permutations, 8 niches, seed 0. Top enriched neighbor pair: **L4 IT – L5 IT, mean z = 31.2** (SEM 1.7). Top depleted: **L2/3 IT – Oligodendrocyte, mean z = −55.3** (SEM 3.4). Both match known cortical anatomy — a strong pipeline sanity check.
@@ -37,8 +39,7 @@ These are **planned, not yet implemented or not yet run**. Do not cite them as r
 
 | Planned work | Tracking issue |
 |---|---|
-| Real-data donor-level niche abundance vs. pseudo-progression run (GAM implementation is ready; donor scores/covariates are not) | issues #2/#15 → #6 → #8 |
-| QC'd, frozen, versioned analytical dataset (harmonized labels, covariates) | issue #2 |
+| Real-data donor-level niche abundance vs. pseudo-progression run (GAM implementation and donor freeze are ready; niche abundance aggregation and null runs are not) | issues #6/#9 → #8 |
 | Real-data sensitivity and null analyses (k sweep, niche-count sweep, label-shuffle negative controls) | issues #9, #18, #20, #21 |
 | Manuscript writing and figure production | issue #6 |
 
@@ -67,6 +68,8 @@ Leiden community detection is the field standard for clustering cells, but it de
 ### Why donor-level statistics for progression (pseudoreplication!)
 
 This is the single most important statistical decision in the project. We have ~1.9 million cells but only **27 donors**. Cells from the same donor are **not independent** — they share genetics, lifestyle, agonal state, tissue processing. If we correlated per-cell values against progression, we'd get millions of "data points" and absurdly tiny p-values that mean nothing. That's **pseudoreplication**: treating technical replicates as biological replicates. The correct unit of replication for a disease-progression question is the **donor**. So `niche_progression_association` first collapses cells into per-donor niche abundances (fractions), then correlates 27 donor-level numbers with 27 donor-level scores. n = 27, honestly reported in the output's `n_donors` column.
+
+**Age censoring convention.** SEA-AD records ages of 90 years and older as `90+`. The Paper 1 freeze keeps the source string, encodes the model-ready `age` as the lower bound 90, and sets `age_censored_90plus = True` for those 14 donors. This makes the convention auditable; any alternative censoring handling belongs in a documented sensitivity analysis, not in the primary fit.
 
 ## Statistics for newcomers
 
@@ -107,7 +110,7 @@ flowchart TD
 |---|---|---|---|
 | Neighbor enrichment | millions of edges, fixed graph | Permutation null → z-scores (no distribution assumption) | Done |
 | Niche vs. progression | 27 donors | Spearman + score permutation: small n, unknown distribution | Intended (issue #1) |
-| Covariate-adjusted modeling (age, sex, PMI) | 27 donors | Pre-registered Gaussian GAM: cubic B-spline over score + z-age + centered female indicator + z-PMI; donor-shuffle and label-shuffle permutation nulls; BH FDR 0.05 | Pre-registered + synthetic-tested; real-data run blocked by #2/#15 |
+| Covariate-adjusted modeling (age, sex, PMI) | 27 donors | Pre-registered Gaussian GAM: cubic B-spline over score + z-age + centered female indicator + z-PMI; donor-shuffle and label-shuffle permutation nulls; BH FDR 0.05 | Pre-registered + synthetic-tested; donor freeze committed; real-data run awaits #6/#9 |
 
 ### Correlation choices, same logic
 
