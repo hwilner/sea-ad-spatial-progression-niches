@@ -22,7 +22,9 @@ CELLxGENE). No controlled-access material is used by this repository.
   `MANIFEST.json` written by `scripts/download_seaad.py`.
 - **Contents used:** per-cell table — spatial coordinates (x, y per
   section; stored in `obsm['X_spatial_raw']`), donor ID, section ID,
-  mapped subclass/supertype annotations.
+  mapped subclass/supertype annotations, and donor-level Sex, Age at Death,
+  PMI, and Continuous Pseudo-progression Score metadata for the Paper 1
+  donor freeze (`docs/DATASET_FREEZE.md`).
 
 ## snRNA-seq reference (MTG)
 

@@ -1,18 +1,18 @@
 # Results
 
-**Generated 2026-11-18 by executing this repository's own test suite against the
-current `main`.**
+**Generated 2026-11-23 by executing this repository's own test suite against the
+current working tree.**
 
 ## Verification run
 
 | Metric | Value |
 |---|---|
-| Tests passed | **22** |
+| Tests passed | **32** |
 | Tests failed | 0 |
 | Errors | 0 |
-| Skipped | 1 |
-| Wall clock | 1.5 s |
-| Environment | Python 3.12, CPU-only, no GPU |
+| Skipped | 0 |
+| Wall clock | 1.73 s |
+| Environment | Python 3.12, CPU-only, no GPU, optional `anndata` installed |
 
 Reproduce with:
 
@@ -22,9 +22,11 @@ PYTHONPATH=$PWD:$PWD/src pytest -q
 
 ## What this establishes
 
-- The code imports cleanly and **22 tests pass with 0 failures**, 1 skipped.
+- The code imports cleanly and **32 tests pass with 0 failures**, 0 skipped.
 - The suite now includes synthetic recovery of the pre-registered donor-level
-  GAM and an end-to-end smoke test of the one-choice sensitivity harness.
+  GAM, an end-to-end smoke test of the one-choice sensitivity harness, and
+  fixture tests for the Paper 1 dataset-freeze criteria, QC, and manifest
+  machinery.
 - That is real computational evidence; it is not a biological finding.
 
 ## What this does NOT establish
@@ -43,8 +45,9 @@ PYTHONPATH=$PWD:$PWD/src pytest -q
 
 Recorded explicitly, so they are not mistaken for successes:
 
-- **No empirical result was reproduced for this repository.** Any finding
-  described in the README or `docs/` was not re-derived here.
+- **No niche-progression association was fit here.** The separately committed
+  dataset freeze reports measured metadata/QC counts only; it is not a
+  biological association result.
 - **The test suite passing is not evidence the research is correct.** It is
   evidence the code is internally consistent.
 

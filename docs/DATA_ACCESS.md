@@ -10,7 +10,7 @@ and integrity checksums.
 ## One-command setup
 
 ```bash
-make real-pipeline   # download (if needed) + neighbor enrichment + niche detection
+make real-pipeline   # download + neighbor enrichment/niche detection + Paper 1 freeze
 ```
 
 or step by step:
@@ -18,6 +18,7 @@ or step by step:
 ```bash
 python scripts/download_seaad.py --cache-dir data/seaad   # ~500 MB, checksummed
 python scripts/analyze_seaad.py --cache-dir data/seaad    # writes reports/
+python scripts/freeze_paper1_dataset.py --cache-dir data/seaad  # writes freeze artifacts
 ```
 
 The download script verifies byte size and records SHA-256 in
@@ -35,9 +36,11 @@ The download script verifies byte size and records SHA-256 in
 
 ## Rules
 
-- Downloaded data live in `data/seaad/` and must **never** be committed
-  (`.gitignore` covers `data/`).
-- Only small derived aggregate outputs (CSV/JSON under `reports/`) are
-  committed.
+- Downloaded raw data live in `data/seaad/` and must **never** be committed
+  (`.gitignore` covers `data/`). The single exception is the small derived
+  freeze reference `data/manifest.json`, which contains donor lists, versions,
+  and artifact hashes but no raw data.
+- Only small derived aggregate outputs (CSV/JSON under `reports/`, plus the
+  derived freeze manifest) are committed.
 - Without a staged `MANIFEST.json`, the `io` loaders raise `RuntimeError`
   and the test suite runs on synthetic tissues only.

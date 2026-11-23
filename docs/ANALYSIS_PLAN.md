@@ -24,7 +24,9 @@ The unit of replication is the **donor**, not the cell. Let:
 - `y[d, k]` be donor `d`'s abundance fraction for niche `k`, computed as the
   fraction of that donor's analyzed cells assigned to niche `k`;
 - `s[d]` be the frozen donor pseudo-progression score;
-- `z_age[d]` be age z-scored across the analyzed donors;
+- `z_age[d]` be age z-scored across the analyzed donors. The source metadata
+  right-censor ages at `90+`; the frozen covariate table uses the documented
+  lower-bound encoding `age = 90` and retains `age_censored_90plus` for audit;
 - `female_c[d]` be sex coded female = 1, male = 0, then centered at the
   analyzed-cohort female proportion;
 - `z_pmi[d]` be postmortem interval z-scored across the analyzed donors.
@@ -111,8 +113,9 @@ confirmed result unless its pre-registered permutation q-value is also below
 
 ## Required controls and failure handling
 
-- Fit and smoke-test the implementation only on synthetic donor-level data
-  until the frozen analytical dataset and donor manifest clear issue #2.
+- The implementation was fit and smoke-tested only on synthetic donor-level
+  data before the analytical freeze; real-data fits must use the donor list,
+  covariate table, and source hash recorded in `data/manifest.json`.
 - Fail closed if donors are missing, covariates contain missing/non-finite
   values, abundance values are negative, scores are constant, or the model has
   no residual degrees of freedom.
