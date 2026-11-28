@@ -13,7 +13,7 @@ SEA-AD analytical dataset (`data/manifest.json`, criteria version
 | `niche_progression_results.csv` | Table 4 source: per-niche GAM contrast, SE, CI, nominal p, donor-shuffle p + BH q, label-shuffle p + BH q (degenerate — see below) |
 | `donor_shuffle_null_summary.csv` | Donor-shuffle family (B = 10,000, seed 0): observed contrast, null mean/SD, p, BH q per niche |
 | `label_shuffle_null_summary.csv` | Label-shuffle family (B = 10,000, seed 1) as pre-registered — numerically invariant (degenerate) |
-| `niche_alignment_map.csv` | Amendment A1 mapping: section, local niche, aligned niche, cell count (69 sections x 8) |
+| `niche_alignment_map.csv` | Amendment A1 mapping: section, local niche, aligned niche, cell count (69 sections x 8). **Not committed** (bulky audit intermediate); regenerated deterministically on re-run under the pinned seeds/versions in `run_provenance.json` |
 | `niche_alignment_quality.csv` | Alignment quality per niche (data description, not a result) |
 | `run_provenance.json` | Seeds, permutation counts, package versions, manifest/h5ad/covariate SHA-256, timestamps |
 

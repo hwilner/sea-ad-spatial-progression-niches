@@ -5,7 +5,11 @@ Tables 1–3 report **completed** real-data results, computed from the
 committed aggregates in `reports/` (produced by
 `scripts/analyze_seaad.py` on the open SEA-AD MTG MERFISH dataset; see
 `docs/DATA_SOURCES.md`). Table 1A documents the completed donor-level
-analytical freeze. Tables 4–5 and Figures 1–2 are
+analytical freeze. Table 4 reports the **completed** pre-registered
+niche–progression analysis (run 2026-11-28 from the frozen dataset;
+artifacts in `reports/paper1_analysis/`). Table 5 reports the completed
+donor-shuffle null family and documents why the pre-registered
+label-shuffle family is deferred. Figures 1–2 remain
 **pre-registered placeholders**: their structure is fixed in advance of
 the analyses that will fill them, and each is linked to the issue that
 authorizes the corresponding analysis. Table 6 records computational
@@ -95,37 +99,73 @@ bit-verified run summary (Table 1).
 | Minimum | 0.151 | 0.035 |
 | Maximum | 0.330 | 0.098 |
 
-## Pre-registered result structures (pending analyses)
+## Pre-registered niche–progression analysis (completed 2026-11-28)
 
-**Table 4 (pre-registered; pending). Niche abundance vs.
-pseudo-progression associations.** One row per niche: fitted GAM abundance
-contrast (`Q75 - Q25` pseudo-progression score), standard error, two-sided
-donor-shuffle permutation p-value, Benjamini–Hochberg q-value across
-niches, and n_donors. The exact model and null design are frozen in
-`docs/ANALYSIS_PLAN.md` (issue #7); the implementation is synthetically
-validated under issue #10; the donor-level score/covariate freeze is committed
-under issues #15–#17; the real-data table is produced under issue #8.
-Blocked by QC-aware donor-level niche abundance aggregation and the
-pre-registered null runs (issues #6/#9), so this table is intentionally empty.
+**Table 4. Niche abundance vs. pseudo-progression associations
+(completed).** One row per aligned niche: fitted GAM abundance contrast
+(`Q75 − Q25` pseudo-progression score, evaluated at the observed donor
+quartiles 0.2984 → 0.7325), standard error, two-sided donor-shuffle
+permutation p-value (B = 10,000, seed 0), Benjamini–Hochberg q-value
+across the 8 niches, and n_donors. The model and null design are frozen
+in `docs/ANALYSIS_PLAN.md` (issue #7) with the cross-section niche
+alignment frozen in Amendment A1 (2026-11-28, pre-unblinding). Donor
+abundances were aggregated from the frozen 1,887,728 QC-passing cells
+(27 donors, 69 sections; per-section k-NN k = 6, 24-subclass neighbor
+composition, k-means k = 8 seed 0, Amendment A1 alignment). Values
+verbatim from `reports/paper1_analysis/niche_progression_results.csv`;
+full provenance in `reports/paper1_analysis/run_provenance.json`.
+**No niche reaches the pre-registered significance criterion** (smallest
+permutation q = 0.467). Niche 6 carries a nominally significant OLS
+p-value (0.0445), but per the plan's claim rule it is **not** a confirmed
+result: its donor-shuffle permutation p is 0.0584 and its BH q is 0.467.
+All outputs are associations only.
 
 | Niche | GAM abundance contrast | SE | Donor-shuffle p | BH q | n_donors |
-|---|---|---|---|---|---|
-| — (pending issues #6/#9 → #8) | | | | | |
+|---|---:|---:|---:|---:|---:|
+| niche_0 | −0.01527 | 0.01265 | 0.3019 | 0.7965 | 27 |
+| niche_1 | +0.00866 | 0.02050 | 0.7066 | 0.7965 | 27 |
+| niche_2 | −0.01054 | 0.03522 | 0.7632 | 0.7965 | 27 |
+| niche_3 | −0.01489 | 0.01430 | 0.3020 | 0.7965 | 27 |
+| niche_4 | −0.00834 | 0.01592 | 0.6065 | 0.7965 | 27 |
+| niche_5 | +0.01433 | 0.01900 | 0.4630 | 0.7965 | 27 |
+| niche_6 | +0.03033 | 0.01509 | 0.0584 | 0.4672 | 27 |
+| niche_7 | −0.00429 | 0.01562 | 0.7965 | 0.7965 | 27 |
 
-**Table 5 (pre-registered; pending). Null-model and sensitivity family.**
-Label-shuffle and donor-shuffle null families (issue #9), the
-sensitivity harness over neighbor-graph k/radius, covariate,
-leave-one-out, and region-within-MTG variants (issues #19–#21), and the
-effect-direction stability summary (issue #18). One row per analysis:
-statistic, null mean ± SD, p-value. No causal claims are made from any
-row of this table.
+**Table 5. Null-model and sensitivity family (partially completed).**
+The donor-shuffle null family is complete; the label-shuffle null family
+was executed exactly as pre-registered and found to be **numerically
+invariant** (see note below the table) and is deferred pending a plan
+amendment; the sensitivity rows remain pending (issues #18–#21). One row
+per analysis: statistic, null mean ± SD, p-value. No causal claims are
+made from any row of this table.
 
 | Analysis | Statistic | Null mean ± SD | p |
 |---|---|---|---|
-| — (pending issues #9, #18–#21) | | | |
+| Donor-shuffle null family, B = 10,000, seed 0 (issue #9) | Per-niche GAM contrast; per-niche values in `reports/paper1_analysis/donor_shuffle_null_summary.csv` | −0.00060 to +0.00026 ± 0.0142–0.0342 across niches | per-niche in Table 4 (min 0.0584) |
+| Label-shuffle null family, B = 10,000, seed 1 (issue #9) | **Executed as pre-registered → degenerate; deferred (see note)** | equals observed contrast for every niche (SD ≤ 1.3 × 10⁻¹⁵) | 1.0 for all niches (uninformative) |
+| Sensitivity family (k/radius, covariate, leave-one-out, region-within-MTG; issues #19–#21) and effect-direction stability (#18) | — (pending issues #18–#21) | | |
+
+**Note on the label-shuffle null family (important for Amendment A2).**
+The pre-registered label shuffle permutes niche labels across cells
+within each donor/section while preserving marginal niche-label counts.
+SEA-AD sections are nested within donors, so this permutation preserves
+each donor's niche counts exactly: the donor-by-niche abundance matrix —
+the only input the GAM sees — is **mathematically invariant** under the
+specified null. The run confirmed this numerically (null SD ≤ 1.3 × 10⁻¹⁵;
+all permutation p = 1). The family therefore tests nothing as specified.
+Per the plan's failure-handling rule it is marked **deferred** and no
+post hoc null is substituted. A repair requires a plan amendment (owner
+decision, issue #9); the natural candidate is a per-section
+niche-*identity* permutation (re-draw the mapping from local clusters to
+aligned niche labels independently per section), which preserves
+per-section marginal counts while allowing donor-level fractions to vary.
+
+## Remaining pre-registered result structures
 
 **Figure 1 (planned). Per-donor niche maps along the pseudo-progression
-continuum.** Script under issue #14.
+continuum.** Script under issue #14. Aligned per-cell niche labels and
+the donor abundance matrix now exist
+(`reports/paper1_analysis/`), so this figure is unblocked.
 
 **Figure 2 (planned). Niche–progression summary figure and progression
 curves.** Scripts under issues #12 and #22; docs summary under issue #23.
@@ -137,25 +177,30 @@ curves.** Scripts under issues #12 and #22; docs summary under issue #23.
 planted niche recovery, planted progression-gradient detection,
 pre-registered GAM recovery with uncertainty, one-choice sensitivity
 harness smoke tests, dataset-freeze criteria/QC/manifest tests, io gating,
-download/cache machinery with mocked network). The 2026-11-23 run validates
-the analysis code and freeze machinery on synthetic or tiny fixture data;
-the separately committed freeze artifacts are measured metadata summaries,
-not a niche-progression association result. The `ConstantInputWarning`
+download/cache machinery with mocked network, Amendment A1 alignment
+known-answer/recovery tests, null-family known-answer/equivalence tests).
+The 2026-11-28 run validates the analysis code and freeze machinery on
+synthetic or tiny fixture data; the separately committed freeze artifacts
+are measured metadata summaries, and Table 4 is a measured association
+result, not a synthetic-validation output. The `ConstantInputWarning`
 emitted during the constant-score null test is expected by design
 (undefined correlation on constant input, handled as NaN-safe zero).
 
 | Branch | Tests passed | Failed | Skipped | Wall clock | Environment |
 |---|---|---|---|---|---|
-| main | 32 | 0 | 0 | 1.73 s | Python 3.12, CPU (numpy/pandas/scipy/scikit-learn/anndata) |
+| main (2026-11-23) | 32 | 0 | 0 | 1.73 s | Python 3.12, CPU (numpy/pandas/scipy/scikit-learn/anndata) |
+| main (2026-11-28) | 54 | 0 | 0 | 1.69 s | Python 3.12, CPU (numpy/pandas/scipy/scikit-learn/anndata) |
 | mavis/verify-and-reproduce | 18 | 0 | 1 | 5.52 s | Python 3.11, CPU (recorded 2026-09-29 in branch `results.md`; branch = main + that file, so code is identical) |
 
 With a core-only install that omits the optional `anndata` dependency, the
 staged-h5ad loader test is skipped by design; the full data-freeze
-environment above has 0 skips. A clean-output re-run of
-`scripts/freeze_paper1_dataset.py` on 2026-11-23 regenerated all four
-`reports/paper1_freeze/` artifacts byte-identically (SHA-256 match);
-`data/manifest.json` differs only in its creation timestamp. Heavy-compute
-steps (QC-aware niche abundance aggregation, pre-registered null families,
-and the full results-package re-run under issue #11) are **deferred to the
-next analysis runs**: the committed `reports/` aggregates above stand as the
-released spatial result.
+environment above has 0 skips. Clean-output re-runs of
+`scripts/freeze_paper1_dataset.py` on 2026-11-23 and again on 2026-11-28
+regenerated all four `reports/paper1_freeze/` artifacts byte-identically
+(SHA-256 match); `data/manifest.json` differs only in its creation
+timestamp. The 2026-11-28 analysis run re-verified the staged h5ad
+(size + SHA-256 `3e3dac22…2054a24`) against `data/manifest.json` before
+fitting and recorded seeds, permutation counts, and package versions in
+`reports/paper1_analysis/run_provenance.json`; the full results package
+can be regenerated end-to-end with
+`python scripts/run_paper1_analysis.py --cache-dir data/seaad` (issue #11).
