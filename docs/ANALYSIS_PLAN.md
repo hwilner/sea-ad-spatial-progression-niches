@@ -131,3 +131,65 @@ confirmed result unless its pre-registered permutation q-value is also below
 - No selection of niches, covariates, spline complexity, or null family based
   on real-data significance.
 - No claims from synthetic validation beyond computational correctness.
+
+## Amendment A1: cross-section niche alignment (registered 2026-11-28, pre-unblinding)
+
+**Status:** registered before any niche–progression model was fit to the
+frozen donor dataset. No real-data niche abundance, effect size, or p-value
+had been computed when this amendment was committed. Issue: #7 (parent plan),
+implemented under #6.
+
+### The gap this closes
+
+The primary plan indexes niches as "niches detected in the frozen per-section
+pipeline", but niche detection runs k-means independently per section, so raw
+per-section niche labels are arbitrary: label 3 in one section has no
+relationship to label 3 in another. A donor-level abundance table requires
+labels that mean the same niche across sections. This amendment freezes the
+alignment method.
+
+### Frozen alignment procedure
+
+1. **Per-section niches.** On the QC-passing cells of each frozen section,
+   build the k-NN graph (k = 6), compute neighbor-composition vectors over
+   the fixed 24-subclass vocabulary (columns present in the frozen dataset,
+   in sorted order; missing subclasses are explicit zero columns), and
+   cluster with k-means (k = 8, `n_init = 10`, seed 0) — the same settings
+   as the completed pipeline in `scripts/analyze_seaad.py`.
+2. **Per-section niche centroids.** For section `s` and local niche `j`,
+   the centroid is the cell-count-weighted mean of the neighbor-composition
+   vectors of the cells assigned to `j`, in the fixed subclass vocabulary.
+3. **Reference section.** The frozen section with the largest QC-passing
+   cell count; ties broken by lexicographically smallest section name.
+4. **First-pass alignment.** Each section's 8 centroids are matched to the
+   reference section's 8 centroids by solving the linear assignment problem
+   (Hungarian algorithm, `scipy.optimize.linear_sum_assignment`) on the
+   pairwise Euclidean centroid-distance matrix. The matching is a bijection
+   between local labels and reference labels.
+5. **One consensus refinement.** The global consensus centroid for aligned
+   niche `k` is the cell-count-weighted mean of the aligned per-section
+   centroids across all 69 sections. Every section (including the reference)
+   is then re-aligned to the consensus centroids with the same Hungarian
+   rule. This second mapping is final; no further iterations.
+6. **Abundance.** `y[d, k]` is the fraction of donor `d`'s QC-passing
+   analyzed cells whose final aligned label is `k`. All other plan
+   definitions (model, contrast, nulls, FDR) are unchanged.
+
+### Determinism and failure handling
+
+- Every step is deterministic given the frozen dataset: k-means uses a
+  fixed seed, `linear_sum_assignment` is deterministic, and the reference
+  choice rule is explicit.
+- The run fails closed if any section yields fewer than 8 niches, if any
+  niche is empty after alignment in any section (abundance still defined,
+  but the alignment is flagged), if the assignment is not a bijection, or
+  if any donor ends with zero analyzed cells.
+- Alignment quality is reported as data description (mean within-niche
+  centroid distance to the consensus per niche), not as a result.
+
+### Null-family run parameters
+
+Also fixed here, before unblinding: both null families use **B = 10,000
+permutations** as specified in the primary plan. The donor-shuffle family
+uses RNG seed 0; the label-shuffle family uses RNG seed 1. Seeds and B are
+recorded in the run provenance together with the frozen-manifest SHA-256.
