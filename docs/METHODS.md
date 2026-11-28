@@ -28,10 +28,10 @@ These components exist, run end-to-end on the real data, and are covered by test
 | Neighbor-enrichment z-scores (100 permutations, label-shuffle null) | `src/seaad_niches/spatial.py` | Done — aggregates in `reports/` |
 | Niche detection (8 niches per section; Leiden if installed, k-means fallback) | `src/seaad_niches/niches.py` | Done |
 | Synthetic validation: planted enrichment, planted niche recovery, planted gradient, io gating, mocked-network download tests | `src/seaad_niches/simulate.py`, `tests/` | Done — `make test` |
-| Pre-registered covariate-adjusted donor-level GAM | `docs/ANALYSIS_PLAN.md`, `src/seaad_niches/niche_progression.py` | Implemented; synthetic recovery tested; real-data fit awaits QC-aware niche abundance aggregation and null runs |
+| Pre-registered covariate-adjusted donor-level GAM | `docs/ANALYSIS_PLAN.md`, `src/seaad_niches/niche_progression.py` | Done — real-data fit 2026-11-28 (Table 4); no niche passes FDR |
 | One-choice-at-a-time sensitivity harness | `analysis/sensitivity.py` | Implemented; synthetic smoke test passes |
-| Cross-section niche alignment (Amendment A1) + QC-aware donor-level abundance aggregation | `src/seaad_niches/niche_alignment.py`, `src/seaad_niches/niche_abundance.py` | Implemented; synthetic recovery tested; real-data run pending |
-| Donor-shuffle + label-shuffle null engines with BH FDR | `src/seaad_niches/null_families.py`, `scripts/run_paper1_analysis.py` | Implemented; known-answer tested; real-data run pending |
+| Cross-section niche alignment (Amendment A1) + QC-aware donor-level abundance aggregation | `src/seaad_niches/niche_alignment.py`, `src/seaad_niches/niche_abundance.py` | Done — real-data aggregation 2026-11-28 from the frozen 1,887,728-cell set |
+| Donor-shuffle + label-shuffle null engines with BH FDR | `src/seaad_niches/null_families.py`, `scripts/run_paper1_analysis.py` | Donor-shuffle family done (B = 10,000, 2026-11-28); label-shuffle family executed and found degenerate as pre-registered — deferred pending Amendment A2 (see RESULTS Table 5 note) |
 
 **Real-data results so far** (`reports/seaad_merfish_run_summary.json`): 1,888,729 cells, 27 donors, 69 sections, 24 cell-type subclasses, k = 6, 100 permutations, 8 niches, seed 0. Top enriched neighbor pair: **L4 IT – L5 IT, mean z = 31.2** (SEM 1.7). Top depleted: **L2/3 IT – Oligodendrocyte, mean z = −55.3** (SEM 3.4). Both match known cortical anatomy — a strong pipeline sanity check.
 
@@ -41,8 +41,9 @@ These are **planned, not yet implemented or not yet run**. Do not cite them as r
 
 | Planned work | Tracking issue |
 |---|---|
-| Real-data donor-level niche abundance vs. pseudo-progression run (aggregation, alignment, and null machinery are implemented and synthetic-tested under Amendment A1; the real-data run is the remaining step) | issues #6/#9 → #8 |
-| Real-data sensitivity and null analyses (k sweep, niche-count sweep, label-shuffle negative controls) | issues #9, #18, #20, #21 |
+| Amendment A2 to repair the degenerate label-shuffle null (owner decision; candidate: per-section niche-identity permutation) | issue #9 |
+| Real-data sensitivity analyses (k sweep, niche-count sweep, covariate, leave-one-out, region-within-MTG) and effect-direction stability summary | issues #18, #20, #21 |
+| Progression-curve figures, niche maps, results-package re-run (reproducibility), manuscript outline | issues #11–#14, #22 |
 | Manuscript writing and figure production | issue #6 |
 
 ## Design decisions and WHY
@@ -112,7 +113,7 @@ flowchart TD
 |---|---|---|---|
 | Neighbor enrichment | millions of edges, fixed graph | Permutation null → z-scores (no distribution assumption) | Done |
 | Niche vs. progression | 27 donors | Spearman + score permutation: small n, unknown distribution | Intended (issue #1) |
-| Covariate-adjusted modeling (age, sex, PMI) | 27 donors | Pre-registered Gaussian GAM: cubic B-spline over score + z-age + centered female indicator + z-PMI; donor-shuffle and label-shuffle permutation nulls; BH FDR 0.05 | Pre-registered + synthetic-tested; donor freeze committed; real-data run awaits #6/#9 |
+| Covariate-adjusted modeling (age, sex, PMI) | 27 donors | Pre-registered Gaussian GAM: cubic B-spline over score + z-age + centered female indicator + z-PMI; donor-shuffle and label-shuffle permutation nulls; BH FDR 0.05 | Done 2026-11-28 (donor-shuffle family; Table 4); label-shuffle family degenerate as pre-registered, deferred pending Amendment A2 |
 
 ### Correlation choices, same logic
 
