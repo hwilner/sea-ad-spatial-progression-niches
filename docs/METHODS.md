@@ -30,6 +30,8 @@ These components exist, run end-to-end on the real data, and are covered by test
 | Synthetic validation: planted enrichment, planted niche recovery, planted gradient, io gating, mocked-network download tests | `src/seaad_niches/simulate.py`, `tests/` | Done — `make test` |
 | Pre-registered covariate-adjusted donor-level GAM | `docs/ANALYSIS_PLAN.md`, `src/seaad_niches/niche_progression.py` | Implemented; synthetic recovery tested; real-data fit awaits QC-aware niche abundance aggregation and null runs |
 | One-choice-at-a-time sensitivity harness | `analysis/sensitivity.py` | Implemented; synthetic smoke test passes |
+| Cross-section niche alignment (Amendment A1) + QC-aware donor-level abundance aggregation | `src/seaad_niches/niche_alignment.py`, `src/seaad_niches/niche_abundance.py` | Implemented; synthetic recovery tested; real-data run pending |
+| Donor-shuffle + label-shuffle null engines with BH FDR | `src/seaad_niches/null_families.py`, `scripts/run_paper1_analysis.py` | Implemented; known-answer tested; real-data run pending |
 
 **Real-data results so far** (`reports/seaad_merfish_run_summary.json`): 1,888,729 cells, 27 donors, 69 sections, 24 cell-type subclasses, k = 6, 100 permutations, 8 niches, seed 0. Top enriched neighbor pair: **L4 IT – L5 IT, mean z = 31.2** (SEM 1.7). Top depleted: **L2/3 IT – Oligodendrocyte, mean z = −55.3** (SEM 3.4). Both match known cortical anatomy — a strong pipeline sanity check.
 
@@ -39,7 +41,7 @@ These are **planned, not yet implemented or not yet run**. Do not cite them as r
 
 | Planned work | Tracking issue |
 |---|---|
-| Real-data donor-level niche abundance vs. pseudo-progression run (GAM implementation and donor freeze are ready; niche abundance aggregation and null runs are not) | issues #6/#9 → #8 |
+| Real-data donor-level niche abundance vs. pseudo-progression run (aggregation, alignment, and null machinery are implemented and synthetic-tested under Amendment A1; the real-data run is the remaining step) | issues #6/#9 → #8 |
 | Real-data sensitivity and null analyses (k sweep, niche-count sweep, label-shuffle negative controls) | issues #9, #18, #20, #21 |
 | Manuscript writing and figure production | issue #6 |
 
