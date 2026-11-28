@@ -1,0 +1,28 @@
+{
+  "analysis": "paper1 niche-progression GAM + null families",
+  "analysis_plan": "docs/ANALYSIS_PLAN.md (incl. Amendment A1, 2026-11-28)",
+  "started_utc": "2026-11-28T00:22:54.855633+00:00",
+  "finished_utc": "2026-11-28T00:29:59.623490+00:00",
+  "freeze_manifest_sha256": "dc3bf36c85306bd533f16af0cbf470cb1982f23bce7f0ffff5b01be0b8e8a81f",
+  "freeze_criteria_version": "paper1-freeze-v1",
+  "covariate_table_sha256": "fb2d573aacb77592e28c9ad15e2af1fd63f29052d6985fa14bb3371354d7e6f2",
+  "source_h5ad_sha256": "3e3dac22446a8ce66afd07c209cd74df260b2f3d7c4085ffe4732390d2054a24",
+  "n_cells": 1887728,
+  "n_donors": 27,
+  "n_sections": 69,
+  "n_niches": 8,
+  "k_neighbors": 6,
+  "kmeans_seed": 0,
+  "alignment_reference_section": "H21.33.031.CX24.MTG.02.007.1.01.01",
+  "n_permutations": 10000,
+  "donor_shuffle_seed": 0,
+  "label_shuffle_seed": 1,
+  "package_versions": {
+    "python": "3.12.12",
+    "numpy": "2.2.5",
+    "pandas": "2.3.2",
+    "scipy": "1.16.2",
+    "sklearn": "1.7.2"
+  },
+  "claims": "associations only; no causal language"
+}
